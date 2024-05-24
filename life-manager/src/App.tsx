@@ -85,23 +85,23 @@ const MobileView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
+      label: <Link style={{ color: `#${defaultTextColor}` }} to="/"><img width="24" height="24" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
     },
     {
       key: "fridge",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/fridge"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /></Link>,
+      label: <Link style={{ color: `#${defaultTextColor}` }} to="/fridge"><img width="24" height="24" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /></Link>,
     },
     {
       key: "recipes",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/recipes"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /></Link>,
+      label: <Link style={{ color: `#${defaultTextColor}` }} to="/recipes"><img width="24" height="24" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /></Link>,
     },
     {
       key: "grocery-list",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/grocery-list"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /></Link>,
+      label: <Link style={{ color: `#${defaultTextColor}` }} to="/grocery-list"><img width="24" height="24" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /></Link>,
     },
     {
       key: "settings",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/settings"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /></Link>,
+      label: <Link style={{ color: `#${defaultTextColor}` }} to="/settings"><img width="24" height="24" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /></Link>,
     }
   ];
 
