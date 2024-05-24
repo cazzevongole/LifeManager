@@ -21,7 +21,7 @@ export const HorizontalMenu = ({ selectedSection, setSelectedSection, items }: H
         setSelectedSection(e.key)
       }}
       items={items}
-      style={{}}
+      style={{ width: '100%', justifyContent: 'center' }}
     />
   );
 };

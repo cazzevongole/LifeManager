@@ -52,15 +52,16 @@ const DesktopView = ({ children }) => {
   ];
 
   return (
-    <Layout className="layout">
-        <Header 
-          style={
-            {
-              display: 'flex',
-              justifyContent: 'center'
-            }
+    <Layout className="layout" style={{backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}`}}>
+      <Header 
+        style={
+          {
+            display: 'flex',
+            justifyContent: 'center',
+            backgroundColor: `#${defaultBgColor}`
           }
-        >
+        }
+      >
         <HorizontalMenu
           selectedSection={selectedSection}
           setSelectedSection={setSelectedSection}
