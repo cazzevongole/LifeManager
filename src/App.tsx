@@ -12,7 +12,6 @@ import { Settings } from "./Pages/Settings.tsx";
 import { useWindowDimensions } from "./Utils/Layout.tsx";
 
 import "./App.css";
-import '@aws-amplify/ui-react/styles.css';
 
 const { Header, Content, Footer } = Layout;
 

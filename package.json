@@ -5,12 +5,10 @@
   "homepage": "https://cazzevongole.github.io/LifeManager",
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
-    "@aws-amplify/ui-react": "^6.1.12",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.17.3",
-    "aws-amplify": "^6.3.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-responsive": "^10.0.0",
