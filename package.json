@@ -2,7 +2,7 @@
   "name": "life-manager",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://cazzevongole.github.io/life-manager",
+  "homepage": "https://cazzevongole.github.io/LifeManager",
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
     "@aws-amplify/ui-react": "^6.1.12",
