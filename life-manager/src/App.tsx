@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
 import { Link, Routes, Route } from 'react-router-dom';
 import { Col, Flex, Layout, Row } from "antd";
-import "./App.css";
 import { useMediaQuery } from "react-responsive";
 import { HorizontalMenu } from './Components/HorizontalMenu.tsx';
 import { Fridge } from "./Pages/Fridge.tsx";
@@ -11,6 +10,9 @@ import { Home } from "./Pages/Home.tsx";
 import { Recipes } from "./Pages/Recipes.tsx";
 import { Settings } from "./Pages/Settings.tsx";
 import { useWindowDimensions } from "./Utils/Layout.tsx";
+
+import "./App.css";
+import '@aws-amplify/ui-react/styles.css';
 
 const { Header, Content, Footer } = Layout;
 
