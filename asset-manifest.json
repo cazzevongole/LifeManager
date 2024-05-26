@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/life-manager/static/css/main.3170d7a6.css",
+    "main.js": "/life-manager/static/js/main.4ad8dc22.js",
+    "index.html": "/life-manager/index.html",
+    "main.3170d7a6.css.map": "/life-manager/static/css/main.3170d7a6.css.map",
+    "main.4ad8dc22.js.map": "/life-manager/static/js/main.4ad8dc22.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3170d7a6.css",
+    "static/js/main.4ad8dc22.js"
+  ]
+}
