@@ -35,7 +35,7 @@ const DesktopView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /> Home</Link>,
+      label: <Link style={{ color: `#${defaultTextColor}` }} to="/home"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /> Home</Link>,
     },
     {
       key: "fridge",
@@ -103,7 +103,7 @@ const MobileView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
+      label: <Link style={{ color: `#${defaultTextColor}` }} to="/home"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
     },
     {
       key: "fridge",
@@ -189,7 +189,8 @@ export const App = () => {
           ?
           <DesktopView>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/LifeManager" element={<Home />} />
               <Route path="/fridge" element={<Fridge />} />
               <Route path="/recipes" element={<Recipes />} />
               <Route path="/grocery-list" element={<GroceryList />} />
@@ -199,7 +200,8 @@ export const App = () => {
           :
           <MobileView>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/LifeManager" element={<Home />} />
               <Route path="/fridge" element={<Fridge />} />
               <Route path="/recipes" element={<Recipes />} />
               <Route path="/grocery-list" element={<GroceryList />} />
