@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
 import { Link, Routes, Route } from 'react-router-dom';
-import { Layout } from "antd";
+import { Col, Flex, Layout, Row } from "antd";
 import "./App.css";
 import { useMediaQuery } from "react-responsive";
 import { HorizontalMenu } from './Components/HorizontalMenu.tsx';
@@ -10,6 +10,7 @@ import { GroceryList } from "./Pages/GroceryList.tsx";
 import { Home } from "./Pages/Home.tsx";
 import { Recipes } from "./Pages/Recipes.tsx";
 import { Settings } from "./Pages/Settings.tsx";
+import { useWindowDimensions } from "./Utils/Layout.tsx";
 
 const { Header, Content, Footer } = Layout;
 
@@ -25,6 +26,7 @@ export const ThemeContext = createContext(defaultThemeSchema);
 const DesktopView = ({ children }) => {
   const themeSchema = useContext(ThemeContext);
   const { defaultBgColor, defaultTextColor } = themeSchema;
+  const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
 
@@ -52,33 +54,47 @@ const DesktopView = ({ children }) => {
   ];
 
   return (
-    <Layout className="layout" style={{backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}`}}>
-      <Header 
-        style={
-          {
-            display: 'flex',
-            justifyContent: 'center',
-            backgroundColor: `#${defaultBgColor}`
-          }
-        }
-      >
-        <HorizontalMenu
-          selectedSection={selectedSection}
-          setSelectedSection={setSelectedSection}
-          items={appSections}
-        />
+    <Flex vertical style={{ backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}` }}>
+      <Header style={{ backgroundColor: `#${defaultBgColor}` }}>
+        <Flex justify="center">
+          <HorizontalMenu
+            selectedSection={selectedSection}
+            setSelectedSection={setSelectedSection}
+            items={appSections}
+          />
+        </Flex>
       </Header>
-      <Content style={{ backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}` }}>
-        {children}
+      <Content style={{
+        backgroundColor: `#${defaultBgColor}`,
+        color: `#${defaultTextColor}`,
+        height: `${height - 64}px`,
+        width: '100%'
+      }}>
+        <Flex
+          vertical
+          align="center"
+          justify="center"
+          style={{
+            height: '100%', width: '100%',
+            backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}`,
+            padding: '20px'
+          }}
+        >
+          <Row justify={'center'} style={{ width: '100%' }}>
+            <Col xs={24} sm={16}>
+              {children}
+            </Col>
+          </Row>
+        </Flex>
       </Content>
-      <Footer style={{ textAlign: "center", position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}` }}>Life Manager - Created by Cazzevongole</Footer>
-    </Layout>
+    </Flex>
   );
 };
 
 const MobileView = ({ children }) => {
   const themeSchema = useContext(ThemeContext);
   const { defaultBgColor, defaultTextColor } = themeSchema;
+  const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
 
@@ -106,25 +122,42 @@ const MobileView = ({ children }) => {
   ];
 
   return (
-    <Layout className="layout">
-      <Content style={{ backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}` }}>
-        {children}
+    <Flex vertical>
+      <Content style={{
+        backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}`,
+        height: `${height - 46}px`, width: '100%'
+      }}>
+        <Flex
+          vertical
+          align="center"
+          justify="center"
+          style={{
+            height: '100%', width: '100%',
+            backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}`,
+            padding: '20px'
+          }}
+        >
+          <Row justify={'center'} style={{ width: '100%' }}>
+            <Col xs={24} sm={16}>
+              {children}
+            </Col>
+          </Row>
+        </Flex>
       </Content>
-      <Footer style={{ 
-        position: 'absolute', 
-        bottom: 0, left: 0, right: 0, 
-        backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}`, 
-        padding: 0,
-        display: 'flex',
-        justifyContent: 'center' 
-        }}>          
+      <Flex
+        justify="center"
+        style={{
+          backgroundColor: `#${defaultBgColor}`,
+          color: `#${defaultTextColor}`,
+        }}
+      >
         <HorizontalMenu
           selectedSection={selectedSection}
           setSelectedSection={setSelectedSection}
           items={appSections}
         />
-      </Footer>
-    </Layout>
+      </Flex>
+    </Flex>
   );
 };
 
@@ -151,26 +184,26 @@ export const App = () => {
     <ThemeContext.Provider value={themeSchema}>
       {
         isDesktop
-        ?
-        <DesktopView>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/fridge" element={<Fridge />} />
-            <Route path="/recipes" element={<Recipes />} />
-            <Route path="/grocery-list" element={<GroceryList />} />
-            <Route path="/settings" element={<Settings themeType={themeType} setThemeType={setThemeType} />} />
-          </Routes>
-        </DesktopView>
-        :
-        <MobileView>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/fridge" element={<Fridge />} />
-            <Route path="/recipes" element={<Recipes />} />
-            <Route path="/grocery-list" element={<GroceryList />} />
-            <Route path="/settings" element={<Settings themeType={themeType} setThemeType={setThemeType} />} />
-          </Routes>
-        </MobileView>
+          ?
+          <DesktopView>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/fridge" element={<Fridge />} />
+              <Route path="/recipes" element={<Recipes />} />
+              <Route path="/grocery-list" element={<GroceryList />} />
+              <Route path="/settings" element={<Settings themeType={themeType} setThemeType={setThemeType} />} />
+            </Routes>
+          </DesktopView>
+          :
+          <MobileView>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/fridge" element={<Fridge />} />
+              <Route path="/recipes" element={<Recipes />} />
+              <Route path="/grocery-list" element={<GroceryList />} />
+              <Route path="/settings" element={<Settings themeType={themeType} setThemeType={setThemeType} />} />
+            </Routes>
+          </MobileView>
       }
     </ThemeContext.Provider>
   )
