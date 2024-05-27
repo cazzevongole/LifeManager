@@ -43,6 +43,7 @@ const DesktopView = ({ children }) => {
   const theme = useContext(ThemeContext);
   const color = useCSS('color');
   const background = useCSS('background');
+  const imagesColor = theme === 'dark' ? 'FFFFFF' : '000000';
 
   const { height } = useWindowDimensions();
 
@@ -51,23 +52,23 @@ const DesktopView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: color }} to="/home"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${color.slice(1)}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /> Home</Link>,
+      label: <Link style={{ color: color }} to="/home"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /> Home</Link>,
     },
     {
       key: "fridge",
-      label: <Link style={{ color: color }} to="/fridge"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${color.slice(1)}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /> Fridge</Link>,
+      label: <Link style={{ color: color }} to="/fridge"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /> Fridge</Link>,
     },
     {
       key: "recipes",
-      label: <Link style={{ color: color }} to="/recipes"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${color.slice(1)}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /> Recipes</Link>,
+      label: <Link style={{ color: color }} to="/recipes"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /> Recipes</Link>,
     },
     {
       key: "grocery-list",
-      label: <Link style={{ color: color }} to="/grocery-list"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${color.slice(1)}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /> Grocery List</Link>,
+      label: <Link style={{ color: color }} to="/grocery-list"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /> Grocery List</Link>,
     },
     {
       key: "settings",
-      label: <Link style={{ color: color }} to="/settings"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${color.slice(1)}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /> Settings</Link>,
+      label: <Link style={{ color: color }} to="/settings"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /> Settings</Link>,
     }
   ];
 
@@ -113,6 +114,7 @@ const MobileView = ({ children }) => {
   const theme = useContext(ThemeContext);
   const color = useCSS('color');
   const background = useCSS('background');
+  const imagesColor = theme === 'dark' ? 'FFFFFF' : '000000';
   
   const { height } = useWindowDimensions();
 
@@ -121,23 +123,23 @@ const MobileView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: color }} to="/home"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${color.slice(1)}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
+      label: <Link style={{ color: color }} to="/home"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${imagesColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
     },
     {
       key: "fridge",
-      label: <Link style={{ color: color }} to="/fridge"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${color.slice(1)}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /></Link>,
+      label: <Link style={{ color: color }} to="/fridge"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${imagesColor}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /></Link>,
     },
     {
       key: "recipes",
-      label: <Link style={{ color: color }} to="/recipes"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${color.slice(1)}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /></Link>,
+      label: <Link style={{ color: color }} to="/recipes"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${imagesColor}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /></Link>,
     },
     {
       key: "grocery-list",
-      label: <Link style={{ color: color }} to="/grocery-list"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${color.slice(1)}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /></Link>,
+      label: <Link style={{ color: color }} to="/grocery-list"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${imagesColor}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /></Link>,
     },
     {
       key: "settings",
-      label: <Link style={{ color: color }} to="/settings"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${color.slice(1)}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /></Link>,
+      label: <Link style={{ color: color }} to="/settings"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${imagesColor}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /></Link>,
     }
   ];
 
