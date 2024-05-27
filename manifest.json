@@ -10,7 +10,7 @@
       "purpose": "any"
     },
     {
-      "src": "icons/logo192.png",
+      "src": "icons/logo512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -42,8 +42,8 @@
       "form_factor": "wide"
     }
   ],
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/LifeManager/",
+  "scope": "/LifeManager/",
   "display": "standalone",
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
