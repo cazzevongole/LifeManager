@@ -41,6 +41,9 @@ const AppRoutes = ({ themeType, setThemeType }: AppRoutesProps) => (
 
 const DesktopView = ({ children }) => {
   const theme = useContext(ThemeContext);
+  const color = useCSS('color');
+  const background = useCSS('background');
+
   const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
@@ -48,29 +51,29 @@ const DesktopView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: useCSS('color') }} to="/home"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${useCSS('color').slice(1)}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /> Home</Link>,
+      label: <Link style={{ color: color }} to="/home"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${color.slice(1)}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /> Home</Link>,
     },
     {
       key: "fridge",
-      label: <Link style={{ color: useCSS('color') }} to="/fridge"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${useCSS('color').slice(1)}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /> Fridge</Link>,
+      label: <Link style={{ color: color }} to="/fridge"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${color.slice(1)}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /> Fridge</Link>,
     },
     {
       key: "recipes",
-      label: <Link style={{ color: useCSS('color') }} to="/recipes"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${useCSS('color').slice(1)}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /> Recipes</Link>,
+      label: <Link style={{ color: color }} to="/recipes"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${color.slice(1)}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /> Recipes</Link>,
     },
     {
       key: "grocery-list",
-      label: <Link style={{ color: useCSS('color') }} to="/grocery-list"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${useCSS('color').slice(1)}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /> Grocery List</Link>,
+      label: <Link style={{ color: color }} to="/grocery-list"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${color.slice(1)}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /> Grocery List</Link>,
     },
     {
       key: "settings",
-      label: <Link style={{ color: useCSS('color') }} to="/settings"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${useCSS('color').slice(1)}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /> Settings</Link>,
+      label: <Link style={{ color: color }} to="/settings"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${color.slice(1)}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /> Settings</Link>,
     }
   ];
 
   return (
     <Flex className={`main-theme-${theme}`} vertical>
-      <Header style={{ backgroundColor: useCSS('background') }}>
+      <Header style={{ backgroundColor: background }}>
         <Flex justify="center">
           <HorizontalMenu
             selectedSection={selectedSection}
@@ -80,8 +83,8 @@ const DesktopView = ({ children }) => {
         </Flex>
       </Header>
       <Content style={{
-        backgroundColor: useCSS('background'),
-        color: useCSS('color'),
+        backgroundColor: background,
+        color: color,
         height: `${height - 64}px`,
         width: '100%'
       }}>
@@ -91,7 +94,7 @@ const DesktopView = ({ children }) => {
           justify="center"
           style={{
             height: '100%', width: '100%',
-            backgroundColor: useCSS('background'), color: useCSS('color'),
+            backgroundColor: background, color: color,
             padding: '20px'
           }}
         >
@@ -108,6 +111,9 @@ const DesktopView = ({ children }) => {
 
 const MobileView = ({ children }) => {
   const theme = useContext(ThemeContext);
+  const color = useCSS('color');
+  const background = useCSS('background');
+  
   const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
@@ -115,30 +121,30 @@ const MobileView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: useCSS('color') }} to="/home"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${useCSS('color').slice(1)}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
+      label: <Link style={{ color: color }} to="/home"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${color.slice(1)}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
     },
     {
       key: "fridge",
-      label: <Link style={{ color: useCSS('color') }} to="/fridge"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${useCSS('color').slice(1)}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /></Link>,
+      label: <Link style={{ color: color }} to="/fridge"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${color.slice(1)}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /></Link>,
     },
     {
       key: "recipes",
-      label: <Link style={{ color: useCSS('color') }} to="/recipes"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${useCSS('color').slice(1)}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /></Link>,
+      label: <Link style={{ color: color }} to="/recipes"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${color.slice(1)}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /></Link>,
     },
     {
       key: "grocery-list",
-      label: <Link style={{ color: useCSS('color') }} to="/grocery-list"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${useCSS('color').slice(1)}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /></Link>,
+      label: <Link style={{ color: color }} to="/grocery-list"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${color.slice(1)}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /></Link>,
     },
     {
       key: "settings",
-      label: <Link style={{ color: useCSS('color') }} to="/settings"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${useCSS('color').slice(1)}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /></Link>,
+      label: <Link style={{ color: color }} to="/settings"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${color.slice(1)}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /></Link>,
     }
   ];
 
   return (
     <Flex vertical className={`main-theme-${theme}`}>
       <Content style={{
-        backgroundColor: useCSS('background'), color: useCSS('color'),
+        backgroundColor: background, color: color,
         height: `${height - 46}px`, width: '100%'
       }}>
         <Flex
@@ -147,7 +153,7 @@ const MobileView = ({ children }) => {
           justify="center"
           style={{
             height: '100%', width: '100%',
-            backgroundColor: useCSS('background'), color: useCSS('color'),
+            backgroundColor: background, color: color,
             padding: '20px'
           }}
         >
@@ -161,8 +167,8 @@ const MobileView = ({ children }) => {
       <Flex
         justify="center"
         style={{
-          backgroundColor: useCSS('background'),
-          color: useCSS('color'),
+          backgroundColor: background,
+          color: color,
         }}
       >
         <HorizontalMenu

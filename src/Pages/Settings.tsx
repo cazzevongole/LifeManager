@@ -10,14 +10,17 @@ interface SettingsProps {
 }
 
 export const Settings = ({ themeType, setThemeType }: SettingsProps) => {
+  const background = useCSS('background');
+  const color = useCSS('color');
+
   return (
     <Row justify={'center'} align={'middle'}>
       <Col xs={22} md={16} lg={10}>
-        <Center><Title style={{ backgroundColor: useCSS('background'), color: useCSS('color') }}>Settings</Title></Center>
+        <Center><Title style={{ backgroundColor: background, color: color }}>Settings</Title></Center>
         {/* <Space size={'large'} direction={'vertical'} /> */}
         <Flex justify="space-between">
-          <Paragraph style={{ backgroundColor: useCSS('background'), color: useCSS('color') }}>Enable dark theme:</Paragraph>
-          <Switch checkedChildren="Dark" unCheckedChildren="Light" onClick={(checked: boolean) => setThemeType(themeType === 'dark' ? 'light' : 'dark')} checked={themeType === 'dark'} />
+          <Paragraph style={{ backgroundColor: background, color: color }}>Enable dark theme:</Paragraph>
+          <Switch checkedChildren="Dark" unCheckedChildren="Light" onClick={() => setThemeType(themeType === 'dark' ? 'light' : 'dark')} checked={themeType === 'dark'} />
         </Flex>
       </Col>
     </Row>

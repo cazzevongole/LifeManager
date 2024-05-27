@@ -6,11 +6,13 @@ const { Title, Paragraph } = Typography;
 
 
 export const Fridge = () => {
+  const background = useCSS('background');
+  const color = useCSS('color');
 
   return (
     <>
-      <Title style={{ backgroundColor: useCSS('background'), color: useCSS('color'), textAlign: 'center' }}>Your Fridge</Title>
-      <Paragraph style={{ backgroundColor: useCSS('background'), color: useCSS('color'), textAlign: 'center' }}>In this page you can manage your fridge. You can add ingredients by name, unit and quantity, and set an expire date for them.</Paragraph>
+      <Title style={{ backgroundColor: background, color: color, textAlign: 'center' }}>Your Fridge</Title>
+      <Paragraph style={{ backgroundColor: background, color: color, textAlign: 'center' }}>In this page you can manage your fridge. You can add ingredients by name, unit and quantity, and set an expire date for them.</Paragraph>
     </>
   )
 }
