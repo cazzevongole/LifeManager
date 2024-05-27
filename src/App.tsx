@@ -26,8 +26,8 @@ interface AppRoutesProps {
 }
 const AppRoutes = ({ themeType, setThemeType }: AppRoutesProps) => (
   <Routes>
+    <Route path="/" element={<Home />} />
     <Route path="/login" element={<Login />} />
-    <Route path="/home" element={<Home />} />
     <Route path="/settings" element={<Settings themeType={themeType} setThemeType={setThemeType} />} />
     <Route element={<PrivateRoute />}>
       <Route path="/LifeManager" element={<Home />} />
