@@ -18,12 +18,7 @@ import { Login, PrivateRoute } from "./Components/Login.tsx";
 const { Header, Content, Footer } = Layout;
 
 const defaultThemeType = 'dark';
-const defaultThemeSchema = {
-  theme: defaultThemeType,
-  defaultBgColor: '000000',
-  defaultTextColor: 'FFFFFF'
-};
-export const ThemeContext = createContext(defaultThemeSchema);
+export const ThemeContext = createContext(defaultThemeType);
 
 interface AppRoutesProps {
   themeType: string;
@@ -45,8 +40,7 @@ const AppRoutes = ({ themeType, setThemeType }: AppRoutesProps) => (
 )
 
 const DesktopView = ({ children }) => {
-  const themeSchema = useContext(ThemeContext);
-  const { theme, defaultBgColor, defaultTextColor } = themeSchema;
+  const theme = useContext(ThemeContext);
   const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
@@ -113,8 +107,7 @@ const DesktopView = ({ children }) => {
 };
 
 const MobileView = ({ children }) => {
-  const themeSchema = useContext(ThemeContext);
-  const { theme } = themeSchema;
+  const theme = useContext(ThemeContext);
   const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
@@ -187,22 +180,8 @@ export const App = () => {
 
   const [themeType, setThemeType] = useState(defaultThemeType);
 
-  let themeSchema = {
-    theme: themeType,
-    defaultBgColor: themeType === 'dark' ? '000000' : 'FFFFFF',
-    defaultTextColor: themeType === 'dark' ? 'FFFFFF' : '000000'
-  };
-
-  useEffect(() => {
-    themeSchema = {
-      theme: themeType,
-      defaultBgColor: themeType === 'dark' ? '000000' : 'FFFFFF',
-      defaultTextColor: themeType === 'dark' ? 'FFFFFF' : '000000'
-    };
-  }, [themeType]);
-
   return (
-    <ThemeContext.Provider value={themeSchema}>
+    <ThemeContext.Provider value={themeType}>
       <AuthProvider>
         {
           isDesktop

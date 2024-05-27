@@ -10,7 +10,6 @@ interface SettingsProps {
 }
 
 export const Settings = ({ themeType, setThemeType }: SettingsProps) => {
-
   return (
     <Row justify={'center'} align={'middle'}>
       <Col xs={22} md={16} lg={10} xl={6}>
@@ -21,6 +20,5 @@ export const Settings = ({ themeType, setThemeType }: SettingsProps) => {
         </Flex>
       </Col>
     </Row>
-    
   )
 }

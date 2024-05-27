@@ -1,5 +1,4 @@
 import React, { useContext } from "react"
-import { ThemeContext } from "../App.tsx";
 import { Col, Flex, Row, Typography } from "antd";
 import { useCSS } from "../Utils/Layout.tsx";
 

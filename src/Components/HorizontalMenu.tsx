@@ -10,7 +10,7 @@ interface HorizontalMenuProps {
 }
 
 export const HorizontalMenu = ({ selectedSection, setSelectedSection, items }: HorizontalMenuProps) => {
-  const { theme } = useContext(ThemeContext);
+  const theme = useContext(ThemeContext);
 
   return (
     <Menu

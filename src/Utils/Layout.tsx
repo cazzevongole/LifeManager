@@ -41,7 +41,7 @@ export const NoBreak = ({ children, style }: NoBreakProps) => {
 
 export const useCSS = (variable: string) => {
   // get property from css variables declared inside of .main-theme-dark or .main-theme-light
-  const { theme } = useContext(ThemeContext);
+  const theme = useContext(ThemeContext);
 
   const root = document.querySelector(':root');
   const value = root ? getComputedStyle(root).getPropertyValue(`--${theme}-${variable}`) : '';

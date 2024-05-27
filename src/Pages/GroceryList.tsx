@@ -1,12 +1,10 @@
-import React, { useContext } from "react"
-import { ThemeContext } from "../App.tsx";
+import React from "react"
 import { Col, Flex, Row, Typography } from "antd";
 import { NoBreak, useCSS } from "../Utils/Layout.tsx";
 
 const { Title, Paragraph } = Typography;
 
 export const GroceryList = () => {
-
   return (
     <>
       <Title style={{ backgroundColor: useCSS('background'), color: useCSS('color'), textAlign: 'center' }}>Your <NoBreak>Grocery List</NoBreak></Title>
