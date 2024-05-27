@@ -113,6 +113,7 @@ const MobileView = ({ children }) => {
   const theme = useContext(ThemeContext);
   const color = useCSS('color');
   const background = useCSS('background');
+  console.log(color, background);
   
   const { height } = useWindowDimensions();
 
