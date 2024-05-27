@@ -1,3 +1,18 @@
+:root {
+  --dark-background: #000000;
+  --dark-color: #FFFFFF;
+  --light-background: #FFFFFF;
+  --light-color: #000000;
+}
+.main-theme-dark {
+  --theme-background: var(--dark-background);
+  --theme-color: var(--dark-color);
+}
+.main-theme-light {
+  --theme-background: var(--light-background);
+  --theme-color: var(--light-color);
+}
+
 .App {
   text-align: center;
 }

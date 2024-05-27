@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
-import { Link, Routes, Route } from 'react-router-dom';
+import { Link, Routes, Route, Navigate } from 'react-router-dom';
 import { Col, Flex, Layout, Row } from "antd";
 import { useMediaQuery } from "react-responsive";
 import { HorizontalMenu } from './Components/HorizontalMenu.tsx';
@@ -9,9 +9,11 @@ import { GroceryList } from "./Pages/GroceryList.tsx";
 import { Home } from "./Pages/Home.tsx";
 import { Recipes } from "./Pages/Recipes.tsx";
 import { Settings } from "./Pages/Settings.tsx";
-import { useWindowDimensions } from "./Utils/Layout.tsx";
+import { useCSS, useWindowDimensions } from "./Utils/Layout.tsx";
 
 import "./App.css";
+import AuthProvider, { useAuth } from "./Utils/Login.tsx";
+import { Login, PrivateRoute } from "./Components/Login.tsx";
 
 const { Header, Content, Footer } = Layout;
 
@@ -23,10 +25,28 @@ const defaultThemeSchema = {
 };
 export const ThemeContext = createContext(defaultThemeSchema);
 
+interface AppRoutesProps {
+  themeType: string;
+  setThemeType: React.Dispatch<React.SetStateAction<string>>;
+}
+const AppRoutes = ({ themeType, setThemeType }: AppRoutesProps) => (
+  <Routes>
+    <Route path="/login" element={<Login />} />
+    <Route path="/home" element={<Home />} />
+    <Route path="/settings" element={<Settings themeType={themeType} setThemeType={setThemeType} />} />
+    <Route element={<PrivateRoute />}>
+      <Route path="/LifeManager" element={<Home />} />
+      <Route path="/fridge" element={<Fridge />} />
+      <Route path="/recipes" element={<Recipes />} />
+      <Route path="/grocery-list" element={<GroceryList />} />
+      <Route path="/settings" element={<Settings themeType={themeType} setThemeType={setThemeType} />} />
+    </Route>
+  </Routes>
+)
 
 const DesktopView = ({ children }) => {
   const themeSchema = useContext(ThemeContext);
-  const { defaultBgColor, defaultTextColor } = themeSchema;
+  const { theme, defaultBgColor, defaultTextColor } = themeSchema;
   const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
@@ -34,29 +54,29 @@ const DesktopView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/home"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /> Home</Link>,
+      label: <Link style={{ color: useCSS('color') }} to="/home"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${useCSS('color').slice(1)}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /> Home</Link>,
     },
     {
       key: "fridge",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/fridge"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /> Fridge</Link>,
+      label: <Link style={{ color: useCSS('color') }} to="/fridge"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${useCSS('color').slice(1)}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /> Fridge</Link>,
     },
     {
       key: "recipes",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/recipes"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /> Recipes</Link>,
+      label: <Link style={{ color: useCSS('color') }} to="/recipes"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${useCSS('color').slice(1)}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /> Recipes</Link>,
     },
     {
       key: "grocery-list",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/grocery-list"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /> Grocery List</Link>,
+      label: <Link style={{ color: useCSS('color') }} to="/grocery-list"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${useCSS('color').slice(1)}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /> Grocery List</Link>,
     },
     {
       key: "settings",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/settings"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${defaultTextColor}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /> Settings</Link>,
+      label: <Link style={{ color: useCSS('color') }} to="/settings"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${useCSS('color').slice(1)}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /> Settings</Link>,
     }
   ];
 
   return (
-    <Flex vertical style={{ backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}` }}>
-      <Header style={{ backgroundColor: `#${defaultBgColor}` }}>
+    <Flex className={`main-theme-${theme}`} vertical>
+      <Header style={{ backgroundColor: useCSS('background') }}>
         <Flex justify="center">
           <HorizontalMenu
             selectedSection={selectedSection}
@@ -66,8 +86,8 @@ const DesktopView = ({ children }) => {
         </Flex>
       </Header>
       <Content style={{
-        backgroundColor: `#${defaultBgColor}`,
-        color: `#${defaultTextColor}`,
+        backgroundColor: useCSS('background'),
+        color: useCSS('color'),
         height: `${height - 64}px`,
         width: '100%'
       }}>
@@ -77,12 +97,12 @@ const DesktopView = ({ children }) => {
           justify="center"
           style={{
             height: '100%', width: '100%',
-            backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}`,
+            backgroundColor: useCSS('background'), color: useCSS('color'),
             padding: '20px'
           }}
         >
           <Row justify={'center'} style={{ width: '100%' }}>
-            <Col xs={24} sm={16}>
+            <Col xs={24} sm={20}>
               {children}
             </Col>
           </Row>
@@ -94,7 +114,7 @@ const DesktopView = ({ children }) => {
 
 const MobileView = ({ children }) => {
   const themeSchema = useContext(ThemeContext);
-  const { defaultBgColor, defaultTextColor } = themeSchema;
+  const { theme } = themeSchema;
   const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
@@ -102,30 +122,30 @@ const MobileView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/home"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
+      label: <Link style={{ color: useCSS('color') }} to="/home"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${useCSS('color').slice(1)}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
     },
     {
       key: "fridge",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/fridge"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /></Link>,
+      label: <Link style={{ color: useCSS('color') }} to="/fridge"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${useCSS('color').slice(1)}/fridge.png`} style={{ opacity: 0.80 }} alt="fridge" /></Link>,
     },
     {
       key: "recipes",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/recipes"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /></Link>,
+      label: <Link style={{ color: useCSS('color') }} to="/recipes"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${useCSS('color').slice(1)}/cooking-book.png`} style={{ opacity: 0.80 }} alt="cooking-book" /></Link>,
     },
     {
       key: "grocery-list",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/grocery-list"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /></Link>,
+      label: <Link style={{ color: useCSS('color') }} to="/grocery-list"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${useCSS('color').slice(1)}/ingredients-list.png`} style={{ opacity: 0.80 }} alt="ingredients-list" /></Link>,
     },
     {
       key: "settings",
-      label: <Link style={{ color: `#${defaultTextColor}` }} to="/settings"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${defaultTextColor}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /></Link>,
+      label: <Link style={{ color: useCSS('color') }} to="/settings"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${useCSS('color').slice(1)}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /></Link>,
     }
   ];
 
   return (
-    <Flex vertical>
+    <Flex vertical className={`main-theme-${theme}`}>
       <Content style={{
-        backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}`,
+        backgroundColor: useCSS('background'), color: useCSS('color'),
         height: `${height - 46}px`, width: '100%'
       }}>
         <Flex
@@ -134,12 +154,12 @@ const MobileView = ({ children }) => {
           justify="center"
           style={{
             height: '100%', width: '100%',
-            backgroundColor: `#${defaultBgColor}`, color: `#${defaultTextColor}`,
+            backgroundColor: useCSS('background'), color: useCSS('color'),
             padding: '20px'
           }}
         >
           <Row justify={'center'} style={{ width: '100%' }}>
-            <Col xs={24} sm={16}>
+            <Col xs={24} sm={20}>
               {children}
             </Col>
           </Row>
@@ -148,8 +168,8 @@ const MobileView = ({ children }) => {
       <Flex
         justify="center"
         style={{
-          backgroundColor: `#${defaultBgColor}`,
-          color: `#${defaultTextColor}`,
+          backgroundColor: useCSS('background'),
+          color: useCSS('color'),
         }}
       >
         <HorizontalMenu
@@ -183,31 +203,19 @@ export const App = () => {
 
   return (
     <ThemeContext.Provider value={themeSchema}>
-      {
-        isDesktop
-          ?
-          <DesktopView>
-            <Routes>
-              <Route path="/home" element={<Home />} />
-              <Route path="/LifeManager" element={<Home />} />
-              <Route path="/fridge" element={<Fridge />} />
-              <Route path="/recipes" element={<Recipes />} />
-              <Route path="/grocery-list" element={<GroceryList />} />
-              <Route path="/settings" element={<Settings themeType={themeType} setThemeType={setThemeType} />} />
-            </Routes>
-          </DesktopView>
-          :
-          <MobileView>
-            <Routes>
-              <Route path="/home" element={<Home />} />
-              <Route path="/LifeManager" element={<Home />} />
-              <Route path="/fridge" element={<Fridge />} />
-              <Route path="/recipes" element={<Recipes />} />
-              <Route path="/grocery-list" element={<GroceryList />} />
-              <Route path="/settings" element={<Settings themeType={themeType} setThemeType={setThemeType} />} />
-            </Routes>
-          </MobileView>
-      }
+      <AuthProvider>
+        {
+          isDesktop
+            ?
+            <DesktopView>
+              <AppRoutes themeType={themeType} setThemeType={setThemeType} />
+            </DesktopView>
+            :
+            <MobileView>
+              <AppRoutes themeType={themeType} setThemeType={setThemeType} />
+            </MobileView>
+        }
+      </AuthProvider>
     </ThemeContext.Provider>
   )
 }
