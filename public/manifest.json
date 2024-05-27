@@ -21,19 +21,7 @@
       "src": "screenshots/phone.png",
       "sizes": "619x1372",
       "type": "image/png",
-      "form_factor": "phone"
-    },
-    {
-      "src": "screenshots/tablet.png",
-      "sizes": "1321x1760",
-      "type": "image/png",
-      "form_factor": "tablet"
-    },
-    {
-      "src": "screenshots/desktop.png",
-      "sizes": "640x1136",
-      "type": "image/png",
-      "form_factor": "desktop"
+      "form_factor": "narrow"
     },
     {
       "src": "screenshots/desktop.png",
