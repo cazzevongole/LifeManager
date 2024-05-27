@@ -16,6 +16,32 @@
       "purpose": "maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "screenshots/phone.png",
+      "sizes": "619x1372",
+      "type": "image/png",
+      "form_factor": "phone"
+    },
+    {
+      "src": "screenshots/tablet.png",
+      "sizes": "1321x1760",
+      "type": "image/png",
+      "form_factor": "tablet"
+    },
+    {
+      "src": "screenshots/desktop.png",
+      "sizes": "640x1136",
+      "type": "image/png",
+      "form_factor": "desktop"
+    }
+    {
+      "src": "screenshots/desktop.png",
+      "sizes": "3834x1901",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
