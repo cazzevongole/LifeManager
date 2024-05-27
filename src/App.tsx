@@ -52,7 +52,7 @@ const DesktopView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: color }} to="/home"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /> Home</Link>,
+      label: <Link style={{ color: color }} to="/"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /> Home</Link>,
     },
     {
       key: "fridge",
@@ -123,7 +123,7 @@ const MobileView = ({ children }) => {
   const appSections = [
     {
       key: "home",
-      label: <Link style={{ color: color }} to="/home"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${imagesColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
+      label: <Link style={{ color: color }} to="/"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${imagesColor}/home--v2.png`} style={{ opacity: 0.80 }} alt="home--v2" /></Link>,
     },
     {
       key: "fridge",
