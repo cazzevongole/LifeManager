@@ -1,4 +1,4 @@
-import { Col, Flex, Row, Switch, Typography } from "antd";
+import { Col, Flex, Row, Space, Switch, Typography } from "antd";
 import React from "react"
 import { Center, useCSS } from "../Utils/Layout.tsx";
 
@@ -12,8 +12,9 @@ interface SettingsProps {
 export const Settings = ({ themeType, setThemeType }: SettingsProps) => {
   return (
     <Row justify={'center'} align={'middle'}>
-      <Col xs={22} md={16} lg={10} xl={6}>
+      <Col xs={22} md={16} lg={10}>
         <Center><Title style={{ backgroundColor: useCSS('background'), color: useCSS('color') }}>Settings</Title></Center>
+        {/* <Space size={'large'} direction={'vertical'} /> */}
         <Flex justify="space-between">
           <Paragraph style={{ backgroundColor: useCSS('background'), color: useCSS('color') }}>Enable dark theme:</Paragraph>
           <Switch checkedChildren="Dark" unCheckedChildren="Light" onClick={(checked: boolean) => setThemeType(themeType === 'dark' ? 'light' : 'dark')} checked={themeType === 'dark'} />
