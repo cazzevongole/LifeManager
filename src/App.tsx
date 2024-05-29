@@ -51,9 +51,7 @@ const DesktopView = ({ children }) => {
 
   const [selectedSection, setSelectedSection] = useState("home");
 
-  const { token, user, loginAction, logOut } = useAuth();
-
-
+  const { token, logOut } = useAuth();
 
   const appSections = [
     {
@@ -132,6 +130,8 @@ const MobileView = ({ children }) => {
   const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
+  
+  const { token, logOut } = useAuth();
 
   const appSections = [
     {
@@ -153,6 +153,13 @@ const MobileView = ({ children }) => {
     {
       key: "settings",
       label: <Link style={{ color: color }} to="/settings"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${imagesColor}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /></Link>,
+    },
+    token ? {
+      key: "logout",
+      label: <Link style={{ color: color }} to="/login" onClick={logOut}><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${imagesColor}/logout-rounded-left.png`} style={{ opacity: 0.80 }} alt="logout-rounded-left" /></Link>,
+    } : {
+      key: "login",
+      label: <Link style={{ color: color }} to="/login"><img width="36" height="36" src={`https://img.icons8.com/material-outlined/96/${imagesColor}/login-rounded-right.png`} style={{ opacity: 0.80 }} alt="login-rounded-right" /></Link>,
     }
   ];
 
