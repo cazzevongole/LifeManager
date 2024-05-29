@@ -1,33 +1,38 @@
 import React, { useState } from 'react';
 import { useContext, createContext } from "react";
 import { useNavigate } from 'react-router-dom';
-const AuthContext = createContext({
+import axios from 'axios';
+
+
+const AuthContext = createContext<{
+  token: string;
+  user: null | Record<string, string>;
+  loginAction: (data: any) => void;
+  logOut: () => void;
+}>({
   token: "",
   user: null,
   loginAction: (data) => {},
   logOut: () => {},
-
 });
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<null | Record<string, string>>(null);
   const [token, setToken] = useState(localStorage.getItem("site") || "");
   const navigate = useNavigate();
   const loginAction = async (data) => {
     try {
-      const response = await fetch("your-api-endpoint/auth/login", {
-        method: "POST",
+      const response = await axios.post("https://3vnbn7to7a.execute-api.eu-north-1.amazonaws.com/dev/auth/login", data, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
       });
-      const res = await response.json();
-      if (res.data) {
-        setUser(res.data.user);
+      const res = response.data;
+      if (res.user) {
+        const user = res.user;
+        setUser(user);
         setToken(res.token);
         localStorage.setItem("site", res.token);
-        navigate("/dashboard");
         return;
       }
       throw new Error(res.message);

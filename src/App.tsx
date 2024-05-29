@@ -14,6 +14,7 @@ import { useCSS, useWindowDimensions } from "./Utils/Layout.tsx";
 import "./App.css";
 import AuthProvider, { useAuth } from "./Utils/Login.tsx";
 import { Login, PrivateRoute } from "./Components/Login.tsx";
+import { NotLoggedIn } from "./Pages/NotLoggedIn.tsx";
 
 const { Header, Content, Footer } = Layout;
 
@@ -29,6 +30,7 @@ const AppRoutes = ({ themeType, setThemeType }: AppRoutesProps) => (
     <Route path="/" element={<Home />} />
     <Route path="/login" element={<Login />} />
     <Route path="/settings" element={<Settings themeType={themeType} setThemeType={setThemeType} />} />
+    <Route path="/not-logged-in" element={<NotLoggedIn />} />
     <Route element={<PrivateRoute />}>
       <Route path="/LifeManager" element={<Home />} />
       <Route path="/fridge" element={<Fridge />} />
@@ -48,6 +50,10 @@ const DesktopView = ({ children }) => {
   const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
+
+  const { token, user, loginAction, logOut } = useAuth();
+
+
 
   const appSections = [
     {
@@ -69,6 +75,13 @@ const DesktopView = ({ children }) => {
     {
       key: "settings",
       label: <Link style={{ color: color }} to="/settings"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/settings--v2.png`} style={{ opacity: 0.80 }} alt="settings--v2" /> Settings</Link>,
+    },
+    token ? {
+      key: "logout",
+      label: <Link style={{ color: color }} to="/login" onClick={logOut}><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/logout-rounded-left.png`} style={{ opacity: 0.80 }} alt="logout-rounded-left" /> Log Out</Link>,
+    } : {
+      key: "login",
+      label: <Link style={{ color: color }} to="/login"><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/login-rounded-right.png`} style={{ opacity: 0.80 }} alt="login-rounded-right" /> Log In</Link>,
     }
   ];
 
