@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { message } from 'antd';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useContext, createContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,13 +9,13 @@ import { SpinContext } from '../App.tsx';
 const AuthContext = createContext<{
   token: string;
   user: null | Record<string, string>;
-  loginAction: (data: any) => void;
+  loginAction: (data: any, setIsLoginButtonLoading: Dispatch<SetStateAction<boolean>>) => void;
   logOut: () => void;
 }>({
   token: "",
   user: null,
-  loginAction: (data) => {},
-  logOut: () => {},
+  loginAction: (data, setIsLoginButtonLoading) => { },
+  logOut: () => { },
 });
 
 const AuthProvider = ({ children }) => {
@@ -26,7 +27,7 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState<null | Record<string, string>>(username && email ? { username, email } : null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
-  const loginAction = async (data) => {
+  const loginAction = async (data, setIsLoginButtonLoading) => {
     // setSpin && setSpin(true);
     try {
       const response = await axios.post("https://3vnbn7to7a.execute-api.eu-north-1.amazonaws.com/dev/auth/login", data, {
@@ -42,12 +43,19 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("token", res.token);
         localStorage.setItem("username", user.username);
         localStorage.setItem("email", user.email);
+        message.success(`Login successful. Welcome, ${user.username}!`);
         // setSpin && setSpin(false);
         return;
       }
       throw new Error(res.message);
     } catch (err) {
-      console.error(err);
+      if (err.response && err.response.status === 401) {
+        message.error("Invalid username or password. Please try again.");
+      } else {
+        message.error("Login failed. Please try again.")
+      }
+    } finally {
+      setIsLoginButtonLoading(false);
     }
   };
 

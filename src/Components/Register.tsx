@@ -1,20 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Divider, FormProps, Modal } from 'antd';
-import { Button, Checkbox, Col, Form, Input, Row, Space, Typography } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { Modal, message } from 'antd';
+import { Button, Form, Input, Space } from 'antd';
 import { useAuth } from '../Utils/Login.tsx';
 import { Navigate, Outlet } from 'react-router-dom';
 import '../css/login.css';
 import { Center, useCSS } from '../Utils/Layout.tsx';
 import { MailOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
-
-const { Title, Text } = Typography;
-
-type FieldType = {
-  username?: string;
-  password?: string;
-  remember?: string;
-};
 
 interface LoginProps {
   isRegisterModalOpen: boolean;
@@ -23,44 +15,64 @@ interface LoginProps {
 
 const PasswordIcon = () => (
   <span role="img" aria-label="mail" className="anticon anticon-mail site-form-item-icon">
-    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="14" height="14" viewBox="0 0 30 30"> <path d="M 15 2 C 11.145666 2 8 5.1456661 8 9 L 8 11 L 6 11 C 4.895 11 4 11.895 4 13 L 4 25 C 4 26.105 4.895 27 6 27 L 24 27 C 25.105 27 26 26.105 26 25 L 26 13 C 26 11.895 25.105 11 24 11 L 22 11 L 22 9 C 22 5.2715823 19.036581 2.2685653 15.355469 2.0722656 A 1.0001 1.0001 0 0 0 15 2 z M 15 4 C 17.773666 4 20 6.2263339 20 9 L 20 11 L 10 11 L 10 9 C 10 6.2263339 12.226334 4 15 4 z M 9 17 C 10.105 17 11 17.895 11 19 C 11 20.104 10.105 21 9 21 C 7.895 21 7 20.104 7 19 C 7 17.895 7.895 17 9 17 z M 15 17 C 16.105 17 17 17.895 17 19 C 17 20.104 16.105 21 15 21 C 13.895 21 13 20.104 13 19 C 13 17.895 13.895 17 15 17 z M 21 17 C 22.105 17 23 17.895 23 19 C 23 20.104 22.105 21 21 21 C 19.895 21 19 20.104 19 19 C 19 17.895 19.895 17 21 17 z"></path> </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M 12 1 C 8.636 1 6 3.636 6 7 L 6 8 C 4.9 8 4 8.9 4 10 L 4 20 C 4 21.1 4.9 22 6 22 L 18 22 C 19.1 22 20 21.1 20 20 L 20 10 C 20 8.9 19.1 8 18 8 L 18 7 C 18 3.636 15.364 1 12 1 z M 12 3 C 14.243 3 16 4.757 16 7 L 16 8 L 8 8 L 8 7 C 8 4.757 9.757 3 12 3 z M 6 10 L 18 10 L 18 20 L 6 20 L 6 10 z M 8 14 A 1 1 0 0 0 7 15 A 1 1 0 0 0 8 16 A 1 1 0 0 0 9 15 A 1 1 0 0 0 8 14 z M 12 14 A 1 1 0 0 0 11 15 A 1 1 0 0 0 12 16 A 1 1 0 0 0 13 15 A 1 1 0 0 0 12 14 z M 16 14 A 1 1 0 0 0 15 15 A 1 1 0 0 0 16 16 A 1 1 0 0 0 17 15 A 1 1 0 0 0 16 14 z"></path>
+    </svg>
   </span>
 )
 
 export const Register = ({ isRegisterModalOpen, setIsRegisterModalOpen }: LoginProps) => {
+  const { loginAction } = useAuth();
 
-  const background = useCSS('background');
-  const color = useCSS('color');
-
-  const [input, setInput] = useState({
-    username: "",
-    password: "",
-    email: "",
-  });
+  const [hasInputChanged, setHasInputChanged] = useState(false);
+  const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(false);
   const [isRegisterButtonEnabled, setIsRegisterButtonEnabled] = useState(false);
   const [isRegisterButtonLoading, setIsRegisterButtonLoading] = useState(false);
-  const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(false);
+
+  const usernameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const confirmPasswordRef = useRef(null);
 
   useEffect(() => {
-    if (input.username !== "" && input.password !== "" && input.email !== "" && isPasswordConfirmed) {
-      setIsRegisterButtonEnabled(true);
-    } else {
-      setIsRegisterButtonEnabled(false);
-    }
-  }, [input]);
+    setIsPasswordConfirmed(passwordRef.current?.input.value === confirmPasswordRef.current?.input.value && passwordRef.current?.input.value !== "");
+
+    setIsRegisterButtonEnabled(
+      usernameRef.current?.input.value !== "" && 
+      emailRef.current?.input.value !== "" &&
+      passwordRef.current?.input.value !== "" &&
+      confirmPasswordRef.current?.input.value !== "" &&
+      passwordRef.current?.input.value === confirmPasswordRef.current?.input.value
+    );
+  }, [hasInputChanged]);
 
   const handleSubmitEvent = async (e) => {
+    const username = usernameRef.current as any;
+    const password = passwordRef.current as any;
+    const email = emailRef.current as any;
+    const confirmPassword = confirmPasswordRef.current as any;
+
+    if (!username.input.value || !password.input.value || !email.input.value || !confirmPassword.input.value || !isPasswordConfirmed) return;
+
+    setIsRegisterButtonLoading(true);
     try {
-      const response = await axios.post("https://3vnbn7to7a.execute-api.eu-north-1.amazonaws.com/dev/auth/register", input, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        "https://3vnbn7to7a.execute-api.eu-north-1.amazonaws.com/dev/auth/register", 
+        {
+          username: username.input.value,
+          email: email.input.value,
+          password: password.input.value,
+        }, 
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const res = response.data;
       if (res.user) {
-        const user = res.user;
-        console.log(user);
-        // setSpin && setSpin(false);
+        message.success(`Registration successful. You can now login, ${res.user.username}!`);
+        
         return;
       }
       throw new Error(res.message);
@@ -80,44 +92,51 @@ export const Register = ({ isRegisterModalOpen, setIsRegisterModalOpen }: LoginP
         <Space direction='vertical' size={20} style={{ width: '100%', marginTop: '24px' }}>
           <Input
             placeholder='Enter your username'
-            autoComplete='off'
+            autoComplete='false'
             name='username'
-            onChange={(e) => setInput((prevInput) => { return { ...prevInput, username: e.target.value } })}
             style={{ width: '100%' }}
             prefix={<UserOutlined className="site-form-item-icon" />}
+            onChange={() => setHasInputChanged(!hasInputChanged)}
+            ref={usernameRef}
+            status={usernameRef.current?.input.value === "" ? 'error' : undefined}
           />
           <Input
             placeholder='Enter your email'
-            autoComplete='off'
+            autoComplete='false'
             name='email'
-            onChange={(e) => setInput((prevInput) => { return { ...prevInput, email: e.target.value } })}
             style={{ width: '100%' }}
             prefix={<MailOutlined className="site-form-item-icon" />}
+            onChange={() => setHasInputChanged(!hasInputChanged)}
+            ref={emailRef}
+            status={emailRef.current?.input.value === "" ? 'error' : undefined}
           />
 
           <Input.Password
             placeholder='Enter your password'
-            autoComplete='off'
+            autoComplete='false'
             name='password'
-            onChange={(e) => setInput((prevInput) => { return { ...prevInput, password: e.target.value } })}
-            style={{ width: '100%' }}
-            prefix={<PasswordIcon />}
-          />
-          <Input.Password
-            placeholder='Confirm your password'
-            autoComplete='off'
-            name='confirm-password'
-            onChange={(e) => (e.target.value === input.password ? setIsPasswordConfirmed(true) : setIsPasswordConfirmed(false))}
             style={{ width: '100%' }}
             prefix={<PasswordIcon />}
             status={isPasswordConfirmed ? undefined : 'error'}
+            onChange={() => setHasInputChanged(!hasInputChanged)}
+            ref={passwordRef}
+          />
+          <Input.Password
+            placeholder='Confirm your password'
+            autoComplete='false'
+            name='confirm-password'
+            style={{ width: '100%' }}
+            prefix={<PasswordIcon />}
+            status={isPasswordConfirmed ? undefined : 'error'}
+            onChange={() => setHasInputChanged(!hasInputChanged)}
+            ref={confirmPasswordRef}
           />
 
           <Button 
             type="primary" 
             htmlType="submit" 
             style={{ width: '100%' }} 
-            onClick={(e)=> {setIsRegisterButtonLoading(true); handleSubmitEvent(e)}} 
+            onClick={(e)=> {handleSubmitEvent(e)}} 
             disabled={!isRegisterButtonEnabled}
             loading={isRegisterButtonLoading}
           >
