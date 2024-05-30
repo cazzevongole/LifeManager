@@ -8,7 +8,7 @@ import { Fridge } from "./Pages/Fridge.tsx";
 import { GroceryList } from "./Pages/GroceryList.tsx";
 import { Home } from "./Pages/Home.tsx";
 import { Recipes } from "./Pages/Recipes.tsx";
-import { useCSS, useWindowDimensions } from "./Utils/Layout.tsx";
+import { CenteredFullDiv, useCSS, useWindowDimensions } from "./Utils/Layout.tsx";
 
 import "./App.css";
 import AuthProvider, { useAuth } from "./Utils/Login.tsx";
@@ -92,7 +92,7 @@ const DesktopView = ({ children }) => {
     });
     appSections.push({
       key: "logout",
-      label: <Popconfirm title="Are you sure?" description={"You are going to logout of your account"} okText={"Do it"} cancelText={"Not sure"} onConfirm={() => logOut()}><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/logout-rounded-left.png`} style={{ opacity: 0.80 }} alt="logout-rounded-left" /> <span style={{color: color}}>Logout</span></Popconfirm>,
+      label: <Popconfirm title="Are you sure?" description={"You are going to logout of your account"} okText={"Do it"} cancelText={"Not sure"} onConfirm={() => logOut()}><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/logout-rounded-left.png`} style={{ opacity: 0.80 }} alt="logout-rounded-left" /> <span style={{ color: color }}>Logout</span></Popconfirm>,
     });
   }
 
@@ -130,7 +130,7 @@ const MobileView = ({ children }) => {
 
   const [selectedSection, setSelectedSection] = useState("home");
 
-  const { user, token, logOut } = useAuth();
+  const { user, logOut } = useAuth();
 
   const appSections = [
     {
@@ -169,22 +169,13 @@ const MobileView = ({ children }) => {
         height: `${height - 46}px`, width: '100%',
         overflowY: 'auto'
       }}>
-        <Flex
-          vertical
-          align="center"
-          justify="center"
-          style={{
-            height: '100%', width: '100%',
-            backgroundColor: background, color: color,
-            padding: '20px'
-          }}
-        >
-          <Row justify={'center'} style={{ width: '100%' }}>
-            <Col xs={24} sm={20}>
+        <CenteredFullDiv>
+          <Row justify={'center'}>
+            <Col span={22}>
               {children}
             </Col>
           </Row>
-        </Flex>
+        </CenteredFullDiv>
       </Content>
       <Flex
         justify="center"
