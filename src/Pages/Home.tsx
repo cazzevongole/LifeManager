@@ -15,12 +15,12 @@ export const Home = () => {
   const setIsLoginModalOpen = useContext(LoginModalContext);
 
   return (
-    <CenteredFullDiv style={{paddingTop: '20px'}}>
-        <Title style={{ backgroundColor: background, color: color, textAlign: 'center' }}>Welcome to your <NoBreak>Life Manager</NoBreak></Title>
-        <Paragraph style={{ backgroundColor: background, color: color, textAlign: 'center' }}>This is a simple app to help you manage your life. You can manage your fridge, recipes, and grocery list.</Paragraph>
+    <CenteredFullDiv style={{ paddingTop: '20px' }}>
+      <Title style={{ backgroundColor: background, color: color, textAlign: 'center' }}>Welcome to your <NoBreak>Life Manager</NoBreak></Title>
+      <Paragraph style={{ backgroundColor: background, color: color, textAlign: 'center' }}>This is a simple app to help you manage your life. You can manage your fridge, recipes, and grocery list.</Paragraph>
 
-        {!user.token && <Paragraph style={{ backgroundColor: background, color: color, textAlign: 'center' }}>Please <Link to="/" onClick={(e) => { e.preventDefault(); setIsLoginModalOpen && setIsLoginModalOpen(true) }}>login</Link> to start using the app.</Paragraph>}
-      
+      {!user.token && <Paragraph style={{ backgroundColor: background, color: color, textAlign: 'center' }}>Please <Link to="/" onClick={(e) => { e.preventDefault(); setIsLoginModalOpen && setIsLoginModalOpen(true) }}>login</Link> to start using the app.</Paragraph>}
+
     </CenteredFullDiv>
   )
 }
