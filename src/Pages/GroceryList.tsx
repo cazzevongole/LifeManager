@@ -6,12 +6,20 @@ import axios from "axios";
 
 const { Title, Paragraph } = Typography;
 
-interface GroceryListItemProps {
+type GroceryListItemType = {
+  itemId: number;
+  name: string;
+  quantity: number;
+  done: boolean;
+}
+interface GroceryListItemComponentProps {
   itemId: number;
   name: string;
   quantity: number;
   done: boolean;
   getUserItems: () => void;
+  items: GroceryListItems;
+  setItems: React.Dispatch<React.SetStateAction<GroceryListItems>>;
 }
 
 var syncIntervalId;
@@ -36,8 +44,13 @@ const restartSyncInterval = (getUserItems) => {
   startSyncInterval(getUserItems);
 }
 
-const GroceryListItem = ({ itemId, name, quantity, done, getUserItems }: GroceryListItemProps) => {
+const GroceryListItem = ({ itemId, name, quantity, done, getUserItems, items, setItems }: GroceryListItemComponentProps) => {
   const [itemData, setItemData] = React.useState({ itemId, name, quantity, done });
+
+  useEffect(() => {
+    // update items in the parent component
+    setItems({ ...items, [itemId]: itemData });
+  }, [itemData]);
 
   return (
     <Col span={24}>
@@ -58,6 +71,7 @@ const GroceryListItem = ({ itemId, name, quantity, done, getUserItems }: Grocery
             }} />
             <Input
               defaultValue={itemData.name}
+              placeholder="Type something here..."
               suffix={<CloseOutlined />}
               onChange={(e) => {
                 setItemData({ ...itemData, name: e.target.value });
@@ -71,7 +85,7 @@ const GroceryListItem = ({ itemId, name, quantity, done, getUserItems }: Grocery
   )
 }
 
-type GroceryListItems = Record<number, GroceryListItemProps>;
+type GroceryListItems = Record<number, GroceryListItemType>;
 
 export const GroceryList = () => {
   const background = useCSS('background');
@@ -263,14 +277,16 @@ export const GroceryList = () => {
     <CenteredFullDiv style={{ paddingTop: '20px' }}>
       <Title style={{ backgroundColor: background, color: color, textAlign: 'center' }}>Your <NoBreak>Grocery List</NoBreak></Title>
       <Divider />
-      <Row gutter={[10, 24]}>
+      <Row key={'existing-items'} gutter={[10, 24]}>
+        <GroceryListItem key={0} itemId={0} name={''} quantity={1} done={false} getUserItems={getUserItems} items={items} setItems={setItems} /> 
         {
-          Object.keys(items).sort((itemId) => {
-            return items[itemId].done ? 1 : -1;
-          }).map((itemId) => {
-            const item = items[itemId];
-            return <GroceryListItem key={itemId} itemId={parseInt(itemId)} name={item.name} quantity={item.quantity} done={item.done} getUserItems={getUserItems} />
-          })
+          Object.keys(items).length > 0 &&
+            Object.keys(items).sort((itemId) => {
+              return items[itemId].done ? 1 : -1;
+            }).map((itemId) => {
+              const item = items[itemId];
+              return <GroceryListItem key={itemId} itemId={parseInt(itemId)} name={item.name} quantity={item.quantity} done={item.done} getUserItems={getUserItems} items={items} setItems={setItems} />
+            })
         }
       </Row>
     </CenteredFullDiv>
