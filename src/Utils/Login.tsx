@@ -27,7 +27,7 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
   const loginAction = async (data) => {
-    setSpin && setSpin(true);
+    // setSpin && setSpin(true);
     try {
       const response = await axios.post("https://3vnbn7to7a.execute-api.eu-north-1.amazonaws.com/dev/auth/login", data, {
         headers: {
@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("token", res.token);
         localStorage.setItem("username", user.username);
         localStorage.setItem("email", user.email);
-        setSpin && setSpin(false);
+        // setSpin && setSpin(false);
         return;
       }
       throw new Error(res.message);

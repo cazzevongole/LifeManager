@@ -1,4 +1,4 @@
-import { Col, Flex, Row, Space, Typography } from "antd";
+import { Col, Divider, Flex, Row, Space, Typography } from "antd";
 import React from "react";
 import { useCSS } from "../Utils/Layout.tsx";
 import { Settings } from "./Settings.tsx";
@@ -16,7 +16,7 @@ export const Profile = ({ themeType, setThemeType }: ProfileProps) => {
   const { user } = useAuth();
 
   return (
-    <Space direction="vertical" size={50}>
+    <Space direction="vertical" size={50} style={{ width: '100%' }}>
       <div>
         <Title style={{ backgroundColor: background, color: color, textAlign: 'center' }}>Your Profile</Title>
         <Paragraph style={{ backgroundColor: background, color: color, textAlign: 'center' }}>
@@ -26,6 +26,7 @@ export const Profile = ({ themeType, setThemeType }: ProfileProps) => {
           In this page you will find your user informations and settings.
           </Paragraph>
       </div>
+      <Divider />
       <Settings themeType={themeType} setThemeType={setThemeType} />
     </Space>
   )

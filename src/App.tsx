@@ -16,6 +16,7 @@ import AuthProvider, { useAuth } from "./Utils/Login.tsx";
 import { Login, PrivateRoute } from "./Components/Login.tsx";
 import { NotLoggedIn } from "./Pages/NotLoggedIn.tsx";
 import { Profile } from "./Pages/Profile.tsx";
+import { Register } from "./Components/Register.tsx";
 
 const { Header, Content, Footer } = Layout;
 
@@ -24,6 +25,7 @@ export const ThemeContext = createContext(defaultThemeType);
 
 export const SpinContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
 export const LoginModalContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
+export const RegisterModalContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
 
 interface AppRoutesProps {
   themeType: string;
@@ -82,7 +84,7 @@ const DesktopView = ({ children }) => {
     });
     appSections.push({
       key: "logout",
-      label: <Popconfirm title="Are you sure?" description={"You are going to log out of your account"} okText={"Do it"} cancelText={"Not sure"} onConfirm={() => logOut()}><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/logout-rounded-left.png`} style={{ opacity: 0.80 }} alt="logout-rounded-left" /> <span style={{color: color}}>Log out</span></Popconfirm>,
+      label: <Popconfirm title="Are you sure?" description={"You are going to logout of your account"} okText={"Do it"} cancelText={"Not sure"} onConfirm={() => logOut()}><img width="16" height="16" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/logout-rounded-left.png`} style={{ opacity: 0.80 }} alt="logout-rounded-left" /> <span style={{color: color}}>Logout</span></Popconfirm>,
     });
   }
 
@@ -162,7 +164,7 @@ const MobileView = ({ children }) => {
     });
     appSections.push({
       key: "logout",
-      label: <Popconfirm title="Are you sure?" description={"You are going to log out of your account"} okText={"Do it"} cancelText={"Not sure"} onConfirm={() => logOut()}><img width="24" height="24" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/logout-rounded-left.png`} style={{ opacity: 0.80 }} alt="logout-rounded-left" /></Popconfirm>,
+      label: <Popconfirm title="Are you sure?" description={"You are going to logout of your account"} okText={"Do it"} cancelText={"Not sure"} onConfirm={() => logOut()}><img width="24" height="24" src={`https://img.icons8.com/material-outlined/24/${imagesColor}/logout-rounded-left.png`} style={{ opacity: 0.80 }} alt="logout-rounded-left" /></Popconfirm>,
     });
   }
 
@@ -212,26 +214,30 @@ export const App = () => {
   const [themeType, setThemeType] = useState(defaultThemeType);
   const [spin, setSpin] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
   return (
     <ThemeContext.Provider value={themeType}>
       <SpinContext.Provider value={setSpin}>
         <AuthProvider>
           <LoginModalContext.Provider value={setIsLoginModalOpen}>
-            <Spin spinning={spin}>
-              {
-                isDesktop
-                  ?
-                  <DesktopView>
-                    <AppRoutes themeType={themeType} setThemeType={setThemeType} />
-                  </DesktopView>
-                  :
-                  <MobileView>
-                    <AppRoutes themeType={themeType} setThemeType={setThemeType} />
-                  </MobileView>
-              }
-              <Login isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
-            </Spin>
+            <RegisterModalContext.Provider value={setIsRegisterModalOpen}>
+              <Spin spinning={spin}>
+                {
+                  isDesktop
+                    ?
+                    <DesktopView>
+                      <AppRoutes themeType={themeType} setThemeType={setThemeType} />
+                    </DesktopView>
+                    :
+                    <MobileView>
+                      <AppRoutes themeType={themeType} setThemeType={setThemeType} />
+                    </MobileView>
+                }
+                <Login isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
+                <Register isRegisterModalOpen={isRegisterModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
+              </Spin>
+            </RegisterModalContext.Provider>
           </LoginModalContext.Provider>
         </AuthProvider>
       </SpinContext.Provider>
