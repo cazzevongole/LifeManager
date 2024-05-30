@@ -3,7 +3,6 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useContext, createContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { SpinContext } from '../App.tsx';
 
 
 const AuthContext = createContext<{
@@ -19,8 +18,6 @@ const AuthContext = createContext<{
 });
 
 const AuthProvider = ({ children }) => {
-  const setSpin = useContext(SpinContext);
-
   const username = localStorage.getItem("username");
   const email = localStorage.getItem("email");
 
@@ -28,7 +25,6 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
   const loginAction = async (data, setIsLoginButtonLoading) => {
-    // setSpin && setSpin(true);
     try {
       const response = await axios.post("https://3vnbn7to7a.execute-api.eu-north-1.amazonaws.com/dev/auth/login", data, {
         headers: {
@@ -44,7 +40,7 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("username", user.username);
         localStorage.setItem("email", user.email);
         message.success(`Login successful. Welcome, ${user.username}!`);
-        // setSpin && setSpin(false);
+        navigate("/");
         return;
       }
       throw new Error(res.message);

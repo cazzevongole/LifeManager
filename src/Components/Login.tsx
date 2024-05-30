@@ -5,6 +5,7 @@ import { useAuth } from '../Utils/Login.tsx';
 import { Navigate, Outlet } from 'react-router-dom';
 import '../css/login.css';
 import { Center } from '../Utils/Layout.tsx';
+import { NotLoggedIn } from '../Pages/NotLoggedIn.tsx';
 
 const { Text } = Typography;
 
@@ -91,6 +92,6 @@ export const Login = ({ isLoginModalOpen, setIsLoginModalOpen, setIsRegisterModa
 
 export const PrivateRoute = () => {
   const user = useAuth();
-  if (!user.token) return <Navigate to="/not-logged-in" />;
+  if (!user.token) return <NotLoggedIn />;
   return <Outlet />;
 }

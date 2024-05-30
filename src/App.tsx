@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
-import { Link, Routes, Route, Navigate } from 'react-router-dom';
+import { Link, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Col, Flex, Layout, Row, Popconfirm, Spin, Modal } from "antd";
 import { useMediaQuery } from "react-responsive";
 import { HorizontalMenu } from './Components/HorizontalMenu.tsx';
@@ -55,6 +55,15 @@ const DesktopView = ({ children }) => {
   const { height } = useWindowDimensions();
 
   const [selectedSection, setSelectedSection] = useState("home");
+
+  const pathname = useLocation().pathname;
+  useEffect(() => {
+    if (pathname === "/") {
+      setSelectedSection("home");
+    } else {
+      setSelectedSection(pathname.substring(1));
+    }
+  }, [pathname]);
 
   const { user, token, logOut } = useAuth();
 

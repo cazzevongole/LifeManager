@@ -72,7 +72,6 @@ export const Register = ({ isRegisterModalOpen, setIsRegisterModalOpen }: LoginP
       const res = response.data;
       if (res.user) {
         message.success(`Registration successful. You can now login, ${res.user.username}!`);
-        
         return;
       }
       throw new Error(res.message);
@@ -147,9 +146,3 @@ export const Register = ({ isRegisterModalOpen, setIsRegisterModalOpen }: LoginP
     </Modal>
   )
 };
-
-export const PrivateRoute = () => {
-  const user = useAuth();
-  if (!user.token) return <Navigate to="/not-logged-in" />;
-  return <Outlet />;
-}
