@@ -40,7 +40,6 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("username", user.username);
         localStorage.setItem("email", user.email);
         message.success(`Login successful. Welcome, ${user.username}!`);
-        navigate("/");
         return;
       }
       throw new Error(res.message);
