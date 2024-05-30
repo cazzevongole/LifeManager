@@ -2,10 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Divider, Modal } from 'antd';
 import { Button, Checkbox, Form, Input, Space, Typography } from 'antd';
 import { useAuth } from '../Utils/Login.tsx';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import '../css/login.css';
-import { Center } from '../Utils/Layout.tsx';
+import { Center, PasswordIcon } from '../Utils/Layout.tsx';
 import { NotLoggedIn } from '../Pages/NotLoggedIn.tsx';
+import { UserOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -58,6 +59,7 @@ export const Login = ({ isLoginModalOpen, setIsLoginModalOpen, setIsRegisterModa
             name='username'
             autoComplete='false' 
             style={{ width: '100%' }}
+            prefix={<UserOutlined className="site-form-item-icon" />}
             ref={usernameRef}
           />
 
@@ -66,6 +68,7 @@ export const Login = ({ isLoginModalOpen, setIsLoginModalOpen, setIsRegisterModa
             name='password'
             autoComplete='false'
             style={{ width: '100%' }}
+            prefix={<PasswordIcon />}
             ref={passwordRef}
           />
 

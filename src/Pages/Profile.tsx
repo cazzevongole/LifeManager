@@ -1,4 +1,4 @@
-import { Col, Divider, Flex, Row, Space, Typography } from "antd";
+import { Divider, Space, Typography } from "antd";
 import React from "react";
 import { useCSS } from "../Utils/Layout.tsx";
 import { Settings } from "./Settings.tsx";

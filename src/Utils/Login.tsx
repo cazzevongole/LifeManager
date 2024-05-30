@@ -13,7 +13,7 @@ const AuthContext = createContext<{
 }>({
   token: "",
   user: null,
-  loginAction: (data, setIsLoginButtonLoading) => { },
+  loginAction: () => { },
   logOut: () => { },
 });
 
@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState<null | Record<string, string>>(username && email ? { username, email } : null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
-  const loginAction = async (data, setIsLoginButtonLoading) => {
+  const loginAction = async (data: any, setIsLoginButtonLoading: (arg0: boolean) => void) => {
     try {
       const response = await axios.post("https://3vnbn7to7a.execute-api.eu-north-1.amazonaws.com/dev/auth/login", data, {
         headers: {

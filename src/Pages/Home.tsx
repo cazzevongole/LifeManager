@@ -1,4 +1,4 @@
-import { Col, Flex, Row, Typography } from "antd"
+import { Typography } from "antd"
 import React, { useContext } from "react";
 import { NoBreak, useCSS } from "../Utils/Layout.tsx";
 import { useAuth } from "../Utils/Login.tsx";
@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { LoginModalContext } from "../App.tsx";
 
 const { Title, Paragraph } = Typography;
-
 
 export const Home = () => {
   const user = useAuth();

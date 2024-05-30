@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
-import { Link, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Link, Routes, Route, useLocation } from 'react-router-dom';
 import { Col, Flex, Layout, Row, Popconfirm, Spin, Modal } from "antd";
 import { useMediaQuery } from "react-responsive";
 import { HorizontalMenu } from './Components/HorizontalMenu.tsx';
@@ -8,7 +8,6 @@ import { Fridge } from "./Pages/Fridge.tsx";
 import { GroceryList } from "./Pages/GroceryList.tsx";
 import { Home } from "./Pages/Home.tsx";
 import { Recipes } from "./Pages/Recipes.tsx";
-import { Settings } from "./Pages/Settings.tsx";
 import { useCSS, useWindowDimensions } from "./Utils/Layout.tsx";
 
 import "./App.css";
@@ -18,7 +17,7 @@ import { NotLoggedIn } from "./Pages/NotLoggedIn.tsx";
 import { Profile } from "./Pages/Profile.tsx";
 import { Register } from "./Components/Register.tsx";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 const defaultThemeType = 'dark';
 export const ThemeContext = createContext(defaultThemeType);
