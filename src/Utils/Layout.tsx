@@ -1,7 +1,7 @@
 import React, { CSSProperties, useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { ThemeContext } from '../App.tsx';
-import { Flex } from 'antd';
+import { Col, Flex, Row } from 'antd';
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -33,7 +33,7 @@ interface NoBreakProps {
 
 export const NoBreak = ({ children, style }: NoBreakProps) => {
   return (
-    <span style={{ whiteSpace: 'nowrap', ...style}}>
+    <span style={{ whiteSpace: 'nowrap', ...style }}>
       {children}
     </span>
   );
@@ -49,8 +49,19 @@ export const useCSS = (variable: string) => {
 }
 
 export const Center = ({ children }) => (
-  <Flex justify="center" align="middle">
+  <Flex justify="center" align="center">
     {children}
+  </Flex>
+)
+export const CenteredFullDiv = ({ children, style={} }) => (
+  <Flex align="center" justify="center" style={{ height: '100%' }}>
+    <Row justify={'center'} style={{ width: '100%', height: '100%' }}>
+      <Col xs={24} sm={16}>
+        <Flex vertical align="center" justify="center" style={{ height: '100%', ...style }}>
+          {children}
+        </Flex>
+      </Col>
+    </Row>
   </Flex>
 )
 

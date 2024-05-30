@@ -111,24 +111,10 @@ const DesktopView = ({ children }) => {
         backgroundColor: background,
         color: color,
         height: `${height - 64}px`,
-        width: '100%'
+        width: '100%',
+        overflowY: 'auto'
       }}>
-        <Flex
-          vertical
-          align="center"
-          justify="center"
-          style={{
-            height: '100%', width: '100%',
-            backgroundColor: background, color: color,
-            padding: '20px'
-          }}
-        >
-          <Row justify={'center'} style={{ width: '100%' }}>
-            <Col xs={24} sm={20}>
-              {children}
-            </Col>
-          </Row>
-        </Flex>
+        {children}
       </Content>
     </Flex>
   );
@@ -180,7 +166,8 @@ const MobileView = ({ children }) => {
     <Flex vertical className={`main-theme-${theme}`}>
       <Content style={{
         backgroundColor: background, color: color,
-        height: `${height - 46}px`, width: '100%'
+        height: `${height - 46}px`, width: '100%',
+        overflowY: 'auto'
       }}>
         <Flex
           vertical
