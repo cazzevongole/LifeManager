@@ -51,3 +51,6 @@
     transform: rotate(360deg);
   }
 }
+.ant-spin-nested-loading > div> .ant-spin {
+  max-height: 100dvh;
+}

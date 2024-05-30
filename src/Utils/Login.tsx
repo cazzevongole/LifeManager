@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useContext, createContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { SpinContext } from '../App.tsx';
 
 
 const AuthContext = createContext<{
@@ -17,10 +18,16 @@ const AuthContext = createContext<{
 });
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState<null | Record<string, string>>(null);
-  const [token, setToken] = useState(localStorage.getItem("site") || "");
+  const setSpin = useContext(SpinContext);
+
+  const username = localStorage.getItem("username");
+  const email = localStorage.getItem("email");
+
+  const [user, setUser] = useState<null | Record<string, string>>(username && email ? { username, email } : null);
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
   const loginAction = async (data) => {
+    setSpin && setSpin(true);
     try {
       const response = await axios.post("https://3vnbn7to7a.execute-api.eu-north-1.amazonaws.com/dev/auth/login", data, {
         headers: {
@@ -32,7 +39,10 @@ const AuthProvider = ({ children }) => {
         const user = res.user;
         setUser(user);
         setToken(res.token);
-        localStorage.setItem("site", res.token);
+        localStorage.setItem("token", res.token);
+        localStorage.setItem("username", user.username);
+        localStorage.setItem("email", user.email);
+        setSpin && setSpin(false);
         return;
       }
       throw new Error(res.message);
@@ -44,8 +54,10 @@ const AuthProvider = ({ children }) => {
   const logOut = () => {
     setUser(null);
     setToken("");
-    localStorage.removeItem("site");
-    navigate("/login");
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+    navigate("/");
   };
   return <AuthContext.Provider value={{ token, user, loginAction, logOut }}>{children}</AuthContext.Provider>;
 };

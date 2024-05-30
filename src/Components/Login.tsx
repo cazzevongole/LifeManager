@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import type { FormProps } from 'antd';
-import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
+import { FormProps, Modal } from 'antd';
+import { Button, Checkbox, Col, Form, Input, Row, Space, Typography } from 'antd';
 import { useAuth } from '../Utils/Login.tsx';
 import { Navigate, Outlet } from 'react-router-dom';
 import '../css/login.css';
+import { Center, useCSS } from '../Utils/Layout.tsx';
+
+const { Title, Text } = Typography;
 
 type FieldType = {
   username?: string;
@@ -19,8 +22,16 @@ const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
 
-export const Login = () => {
+interface LoginProps {
+  isLoginModalOpen: boolean;
+  setIsLoginModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const Login = ({ isLoginModalOpen, setIsLoginModalOpen }: LoginProps) => {
   const { token, user, loginAction, logOut } = useAuth();
+
+  const background = useCSS('background');
+  const color = useCSS('color');
 
   const [input, setInput] = useState({
     username: "",
@@ -32,63 +43,47 @@ export const Login = () => {
     e.preventDefault();
     if (input.username !== "" && input.password !== "") {
       auth.loginAction(input);
+      setIsLoginModalOpen(false);
       return;
     }
-    alert("please provide a valid input");
   };
 
   return (
-    <Row justify="center" align="middle">
-      <Col xs={22} md={16} lg={10}>
-        {
-          !user
-            ?
-            <Form
-              name="login"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              initialValues={{ remember: true }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-              onSubmitCapture={handleSubmitEvent}
-            >
-              <Form.Item<FieldType>
-                label="Username"
-                name="username"
-                rules={[{ required: true, message: 'Please input your username!' }]}
-              >
-                <Input onChange={(e) => setInput((prevInput) => { return {...prevInput, username: e.target.value} })} />
-              </Form.Item>
+    <Modal title={<Center>Login to start using LifeManager services!</Center>} open={isLoginModalOpen} okText="Login" onOk={handleSubmitEvent} onCancel={() => setIsLoginModalOpen(false)}>
 
-              <Form.Item<FieldType>
-                label="Password"
-                name="password"
-                rules={[{ required: true, message: 'Please input your password!' }]}
-              >
-                <Input.Password onChange={(e) => setInput((prevInput) => { return {...prevInput, password: e.target.value} })} />
-              </Form.Item>
 
-              <Form.Item<FieldType>
-                name="remember"
-                valuePropName="checked"
-                wrapperCol={{ offset: 8, span: 16 }}
-              >
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
+      <Form
+        name="login"
+        autoComplete="off"
+        onSubmitCapture={handleSubmitEvent}
+      >
+        <Space direction='vertical' size={10} style={{ width: '100%', marginTop: '24px' }}>
+          <Row justify='space-between'>
+            <Col span={8}>
+              <Text>Username:</Text>
+            </Col>
+            <Col span={16}>
+              <Input onChange={(e) => setInput((prevInput) => { return { ...prevInput, username: e.target.value } })} />
+            </Col>
+          </Row>
 
-              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
-            :
-            <h1>Welcome back, {user.username}!</h1>
-        }
-      </Col>
-    </Row>
+          <Row justify='space-between'>
+            <Col span={8}>
+              <Text>Password:</Text>
+            </Col>
+            <Col span={16}>
+              <Input.Password autoComplete={'off'} onChange={(e) => setInput((prevInput) => { return { ...prevInput, password: e.target.value } })} />
+            </Col>
+          </Row>
 
+          <Row>
+            <Col span={24} offset={8}>
+              <Checkbox>Remember me</Checkbox>
+            </Col>
+          </Row>
+        </Space>
+      </Form>
+    </Modal>
   )
 };
 

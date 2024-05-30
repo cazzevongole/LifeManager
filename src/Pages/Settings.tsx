@@ -17,7 +17,6 @@ export const Settings = ({ themeType, setThemeType }: SettingsProps) => {
     <Row justify={'center'} align={'middle'}>
       <Col xs={22} md={16} lg={10}>
         <Center><Title style={{ backgroundColor: background, color: color }}>Settings</Title></Center>
-        {/* <Space size={'large'} direction={'vertical'} /> */}
         <Flex justify="space-between">
           <Paragraph style={{ backgroundColor: background, color: color }}>Enable dark theme:</Paragraph>
           <Switch checkedChildren="Dark" unCheckedChildren="Light" onClick={() => setThemeType(themeType === 'dark' ? 'light' : 'dark')} checked={themeType === 'dark'} />
