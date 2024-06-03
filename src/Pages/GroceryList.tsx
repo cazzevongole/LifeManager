@@ -1,23 +1,26 @@
-import React, { useEffect } from "react"
-import { Button, Checkbox, Col, Divider, Input, InputNumber, Row, Space, Typography } from "antd";
+import React, { useContext, useEffect, useState } from "react"
+import { Checkbox, Col, Divider, Input, InputNumber, Row, Space, Typography, message } from "antd";
 import { CenteredFullDiv, NoBreak, useCSS } from "../Utils/Layout.tsx";
 import { CloseOutlined } from "@ant-design/icons";
 import axios from "axios";
+import { SpinContext } from "../App.tsx";
 
 const { Title, Paragraph } = Typography;
 
 type GroceryListItemType = {
-  itemId: number;
+  id: number;
   name: string;
   quantity: number;
   done: boolean;
 }
+
+type GroceryListItems = Record<number, GroceryListItemType>;
+
 interface GroceryListItemComponentProps {
-  itemId: number;
+  id: number;
   name: string;
   quantity: number;
   done: boolean;
-  getUserItems: () => void;
   items: GroceryListItems;
   setItems: React.Dispatch<React.SetStateAction<GroceryListItems>>;
 }
@@ -25,10 +28,12 @@ interface GroceryListItemComponentProps {
 var syncIntervalId;
 
 const startSyncInterval = (getUserItems) => {
+  stopSyncInterval();
+  message.info('Sync will start in 10 seconds.');
   syncIntervalId = setInterval(() => {
-    console.log('Syncing with the server...');
+    message.loading('Syncing with the server...');
     setTimeout(() => {
-      console.log('Sync completed.');
+      message.info('Sync completed.');
       getUserItems();
     }, 2000);
     // sync modifications with the server
@@ -36,46 +41,43 @@ const startSyncInterval = (getUserItems) => {
 }
 
 const stopSyncInterval = () => {
-  clearInterval(syncIntervalId);
+  if (syncIntervalId) clearInterval(syncIntervalId);
 }
 
-const restartSyncInterval = (getUserItems) => {
-  stopSyncInterval();
-  startSyncInterval(getUserItems);
-}
+const GroceryListItem = ({ id, name, quantity, done, items, setItems }: GroceryListItemComponentProps) => {
+  const [itemData, setItemData] = useState({ id, name, quantity, done });
 
-const GroceryListItem = ({ itemId, name, quantity, done, getUserItems, items, setItems }: GroceryListItemComponentProps) => {
-  const [itemData, setItemData] = React.useState({ itemId, name, quantity, done });
-
-  useEffect(() => {
-    // update items in the parent component
-    setItems({ ...items, [itemId]: itemData });
-  }, [itemData]);
+  const updateItemData = (field: string, value: any) => {
+    var itemId = itemData.id;
+    setItemData({ ...itemData, [field]: value });
+    setItems({ ...items, [itemId]: { ...itemData, [field]: value } });
+  }
 
   return (
     <Col span={24}>
-      <Row gutter={5} align={'middle'}>
+      <Row gutter={5} align={'middle'} style={{ width: '100%' }}>
         <Col span={2}>
-          <Checkbox defaultChecked={itemData.done} onChange={(e) => {
-            setItemData({ ...itemData, done: e.target.checked });
-            restartSyncInterval(getUserItems);
+          <Checkbox checked={itemData.done} onChange={(e) => {
+            updateItemData('done', e.target.checked);
           }} />
         </Col>
         <Col span={22}>
           <Space.Compact style={{ width: '100%' }}>
-            <InputNumber min={1} max={50} defaultValue={itemData.quantity} onChange={(qty) => {
+            <InputNumber min={1} max={50} value={itemData.quantity} onChange={(qty) => {
               if (!qty) return;
 
-              setItemData({ ...itemData, quantity: qty });
-              restartSyncInterval(getUserItems);
+              updateItemData('quantity', qty);
             }} />
             <Input
-              defaultValue={itemData.name}
+              value={itemData.name}
               placeholder="Type something here..."
-              suffix={<CloseOutlined />}
+              suffix={<CloseOutlined onClick={(e) => setItems((prevItems) => {
+                const newItems = { ...prevItems };
+                delete newItems[id];
+                return newItems;
+              })} />}
               onChange={(e) => {
-                setItemData({ ...itemData, name: e.target.value });
-                restartSyncInterval(getUserItems);
+                updateItemData('name', e.target.value);
               }}
             />
           </Space.Compact>
@@ -85,208 +87,111 @@ const GroceryListItem = ({ itemId, name, quantity, done, getUserItems, items, se
   )
 }
 
-type GroceryListItems = Record<number, GroceryListItemType>;
+const GroceryListNewItem = ({ id, name, quantity, done, items, setItems }: GroceryListItemComponentProps) => {
+  const [itemData, setItemData] = useState({ id, name, quantity, done });
+
+  const updateItemData = (field: string, value: any) => {
+    setItemData({ ...itemData, [field]: value });
+  }
+  
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.key === 'Enter') {
+        if (!itemData.name) return;
+
+        var newItemId = Object.keys(items).length + 1;
+
+        setItems({ ...items, [newItemId]: itemData });
+        setItemData({ id: 0, name: '', quantity: 1, done: false });
+      }
+    }
+    document.addEventListener('keypress', handleKeyPress);
+
+    return () => {
+      document.removeEventListener('keypress', handleKeyPress);
+    }
+  }, [itemData]);
+
+  return (
+    <Col span={24}>
+      <Row gutter={5} align={'middle'} style={{ width: '100%' }}>
+        <Col span={2}>
+          <Checkbox 
+          checked={itemData.done} 
+          onChange={(e) => {
+            updateItemData('done', e.target.checked);
+          }}
+          disabled
+          />
+        </Col>
+        <Col span={22}>
+          <Space.Compact style={{ width: '100%' }}>
+            <InputNumber min={1} max={50} value={itemData.quantity} onChange={(qty) => {
+              if (!qty) return;
+
+              updateItemData('quantity', qty);
+            }} />
+            <Input
+              value={itemData.name}
+              placeholder="Type something here..."
+              onChange={(e) => {
+                updateItemData('name', e.target.value);
+              }}
+            />
+          </Space.Compact>
+        </Col>
+      </Row>
+    </Col>
+  )
+}
 
 export const GroceryList = () => {
+  const setSpin = useContext(SpinContext);
+
   const background = useCSS('background');
   const color = useCSS('color');
 
-  const [items, setItems] = React.useState({} as GroceryListItems);
+  const [items, setItems] = useState({} as GroceryListItems);
 
   const getUserItems = () => {
     // fetch user items from the server
-    axios.get('https://my.api.mockaroo.com/grocery_list.json?key=207f0c70').then((response) => {
-      var testData = [
-        {
-          "id": 1,
-          "name": "Water - Mineral, Carbonated",
-          "quantity": 1,
-          "done": false
-        },
-        {
-          "id": 2,
-          "name": "Soup - Knorr, Veg / Beef",
-          "quantity": 2,
-          "done": false
-        },
-        {
-          "id": 3,
-          "name": "Crab - Blue, Frozen",
-          "quantity": 3,
-          "done": true
-        },
-        {
-          "id": 4,
-          "name": "Pork - Bacon,back Peameal",
-          "quantity": 4,
-          "done": true
-        },
-        {
-          "id": 5,
-          "name": "Wine - Rosso Toscano Igt",
-          "quantity": 5,
-          "done": false
-        },
-        {
-          "id": 6,
-          "name": "Syrup - Monin - Passion Fruit",
-          "quantity": 6,
-          "done": false
-        },
-        {
-          "id": 7,
-          "name": "Sauce - Hp",
-          "quantity": 7,
-          "done": true
-        },
-        {
-          "id": 8,
-          "name": "Mushroom - Portebello",
-          "quantity": 8,
-          "done": true
-        },
-        {
-          "id": 9,
-          "name": "Pork - Ham Hocks - Smoked",
-          "quantity": 9,
-          "done": true
-        },
-        {
-          "id": 10,
-          "name": "Salt - Rock, Course",
-          "quantity": 10,
-          "done": false
-        },
-        {
-          "id": 11,
-          "name": "Container - Foam Dixie 12 Oz",
-          "quantity": 11,
-          "done": true
-        },
-        {
-          "id": 12,
-          "name": "Wine - Penfolds Koonuga Hill",
-          "quantity": 12,
-          "done": false
-        },
-        {
-          "id": 13,
-          "name": "Chocolate - Compound Coating",
-          "quantity": 13,
-          "done": false
-        },
-        {
-          "id": 14,
-          "name": "Muffin - Banana Nut Individual",
-          "quantity": 14,
-          "done": false
-        },
-        {
-          "id": 15,
-          "name": "Mustard Prepared",
-          "quantity": 15,
-          "done": false
-        },
-        {
-          "id": 16,
-          "name": "Compound - Mocha",
-          "quantity": 16,
-          "done": true
-        },
-        {
-          "id": 17,
-          "name": "Cup Translucent 9 Oz",
-          "quantity": 17,
-          "done": false
-        },
-        {
-          "id": 18,
-          "name": "Onions Granulated",
-          "quantity": 18,
-          "done": false
-        },
-        {
-          "id": 19,
-          "name": "Munchies Honey Sweet Trail Mix",
-          "quantity": 19,
-          "done": true
-        },
-        {
-          "id": 20,
-          "name": "Coffee Beans - Chocolate",
-          "quantity": 20,
-          "done": true
-        },
-        {
-          "id": 21,
-          "name": "Beef - Ground Medium",
-          "quantity": 21,
-          "done": true
-        },
-        {
-          "id": 22,
-          "name": "Cheese - Gorgonzola",
-          "quantity": 22,
-          "done": false
-        },
-        {
-          "id": 23,
-          "name": "Icecream Cone - Areo Chocolate",
-          "quantity": 23,
-          "done": true
-        },
-        {
-          "id": 24,
-          "name": "Stainless Steel Cleaner Vision",
-          "quantity": 24,
-          "done": true
-        },
-        {
-          "id": 25,
-          "name": "Sobe - Orange Carrot",
-          "quantity": 25,
-          "done": false
-        }
-      ]
-      const testItems = testData.reduce((acc, item) => {
+    axios.get('https://mlmz8xrgxj.execute-api.eu-north-1.amazonaws.com/default/getUserGroceryList?user=cazzevongole').then((response) => {
+      const items = response.data?.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {});
-
-      // re-enable this line when the server is ready
-      const items = response.data.reduce((acc, item) => {
-        acc[item.id] = item;
-        return acc;
-      }, {});
-      setItems(testItems);
+      setItems(items);
+      setSpin && setSpin(false);
     });
   }
 
   useEffect(() => {
     if (Object.keys(items).length > 0) { return }
+
+    setSpin && setSpin(true);
     getUserItems();
-    startSyncInterval(getUserItems);
-
-    return () => {
-      stopSyncInterval();
-    }
   }, []);
-
 
   return (
     <CenteredFullDiv style={{ paddingTop: '20px' }}>
       <Title style={{ backgroundColor: background, color: color, textAlign: 'center' }}>Your <NoBreak>Grocery List</NoBreak></Title>
       <Divider />
-      <Row key={'existing-items'} gutter={[10, 24]}>
-        <GroceryListItem key={0} itemId={0} name={''} quantity={1} done={false} getUserItems={getUserItems} items={items} setItems={setItems} /> 
+      <Row gutter={[10, 0]} style={{ width: '100%' }}>
+        <Col span={24}>
+          <Title level={5} style={{ backgroundColor: background, color: color, textAlign: 'center' }}>Add a new item</Title>
+        </Col>
+        <GroceryListNewItem key={0} id={0} name={''} quantity={1} done={false} items={items} setItems={setItems} />
+      </Row>
+      <Divider />
+      <Row key={'existing-items'} gutter={[10, 24]} style={{ width: '100%' }}>
         {
           Object.keys(items).length > 0 &&
-            Object.keys(items).sort((itemId) => {
-              return items[itemId].done ? 1 : -1;
-            }).map((itemId) => {
-              const item = items[itemId];
-              return <GroceryListItem key={itemId} itemId={parseInt(itemId)} name={item.name} quantity={item.quantity} done={item.done} getUserItems={getUserItems} items={items} setItems={setItems} />
-            })
+          Object.keys(items).sort((itemId) => {
+            return items[itemId].done ? 1 : -1;
+          }).map((itemId) => {
+            const item = items[itemId];
+            return <GroceryListItem key={itemId} id={parseInt(itemId)} name={item.name} quantity={item.quantity} done={item.done} items={items} setItems={setItems} />
+          })
         }
       </Row>
     </CenteredFullDiv>

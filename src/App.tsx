@@ -170,7 +170,7 @@ const MobileView = ({ children }) => {
         overflowY: 'auto'
       }}>
         <CenteredFullDiv>
-          <Row justify={'center'}>
+          <Row justify={'center'} style={{width: '100%'}}>
             <Col span={22}>
               {children}
             </Col>
