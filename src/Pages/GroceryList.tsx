@@ -3,7 +3,7 @@ import { Checkbox, Col, Divider, Input, InputNumber, Row, Space, Typography, mes
 import { CenteredFullDiv, NoBreak, useCSS } from "../Utils/Layout.tsx";
 import { CloseOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { SpinContext } from "../App.tsx";
+import { GroceryUpdateTimeoutContext, SpinContext } from "../App.tsx";
 
 const { Title, Paragraph } = Typography;
 
@@ -25,23 +25,21 @@ interface GroceryListItemComponentProps {
   setItems: React.Dispatch<React.SetStateAction<GroceryListItems>>;
 }
 
-var syncIntervalId;
-
-const startSyncInterval = (getUserItems) => {
-  stopSyncInterval();
+const startSyncTimeout = (syncTimeoutId, setGroceryUpdateTimeoutId, items) => {
+  stopSyncTimeout(syncTimeoutId);
   message.info('Sync will start in 10 seconds.');
-  syncIntervalId = setInterval(() => {
+  var newSyncTimeoutId = setInterval(() => {
     message.loading('Syncing with the server...');
     setTimeout(() => {
       message.info('Sync completed.');
-      getUserItems();
     }, 2000);
     // sync modifications with the server
   }, 10000);
+  setGroceryUpdateTimeoutId(newSyncTimeoutId);
 }
 
-const stopSyncInterval = () => {
-  if (syncIntervalId) clearInterval(syncIntervalId);
+const stopSyncTimeout = (syncTimeoutId) => {
+  if (syncTimeoutId) clearInterval(syncTimeoutId);
 }
 
 const GroceryListItem = ({ id, name, quantity, done, items, setItems }: GroceryListItemComponentProps) => {
@@ -147,6 +145,7 @@ const GroceryListNewItem = ({ id, name, quantity, done, items, setItems }: Groce
 
 export const GroceryList = () => {
   const setSpin = useContext(SpinContext);
+  const { groceryUpdateTimeoutId, setGroceryUpdateTimeoutId } = useContext(GroceryUpdateTimeoutContext);
 
   const background = useCSS('background');
   const color = useCSS('color');
@@ -156,12 +155,16 @@ export const GroceryList = () => {
   const getUserItems = () => {
     // fetch user items from the server
     axios.get('https://mlmz8xrgxj.execute-api.eu-north-1.amazonaws.com/default/getUserGroceryList?user=cazzevongole').then((response) => {
-      const items = response.data?.reduce((acc, item) => {
+      const newItems = response.data?.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
       }, {});
-      setItems(items);
       setSpin && setSpin(false);
+
+      // compare newItems with items and update only if there are changes
+      if (JSON.stringify(newItems) === JSON.stringify(items)) return;
+
+      setItems(newItems);
     });
   }
 
@@ -171,6 +174,14 @@ export const GroceryList = () => {
     setSpin && setSpin(true);
     getUserItems();
   }, []);
+
+  useEffect(() => {
+    startSyncTimeout(groceryUpdateTimeoutId, setGroceryUpdateTimeoutId, items);
+
+    return () => {
+      stopSyncTimeout(groceryUpdateTimeoutId);
+    }
+  }, [items]);
 
   return (
     <CenteredFullDiv style={{ paddingTop: '20px' }}>

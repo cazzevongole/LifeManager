@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, { Dispatch, SetStateAction, createContext, useContext, useEffect } from "react";
 import { useState } from "react";
 import { Link, Routes, Route, useLocation } from 'react-router-dom';
 import { Col, Flex, Layout, Row, Popconfirm, Spin, Modal } from "antd";
@@ -25,6 +25,7 @@ export const ThemeContext = createContext(defaultThemeType);
 export const SpinContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
 export const LoginModalContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
 export const RegisterModalContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
+export const GroceryUpdateTimeoutContext = createContext<Record<string, NodeJS.Timeout | null | Dispatch<SetStateAction<NodeJS.Timeout | null>>>>({});
 
 interface AppRoutesProps {
   themeType: string;
@@ -170,7 +171,7 @@ const MobileView = ({ children }) => {
         overflowY: 'auto'
       }}>
         <CenteredFullDiv>
-          <Row justify={'center'} style={{width: '100%'}}>
+          <Row justify={'center'} style={{ width: '100%' }}>
             <Col span={22}>
               {children}
             </Col>
@@ -201,6 +202,7 @@ export const App = () => {
   const [spin, setSpin] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [groceryUpdateTimeoutId, setGroceryUpdateTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   return (
     <ThemeContext.Provider value={themeType}>
@@ -209,19 +211,24 @@ export const App = () => {
           <LoginModalContext.Provider value={setIsLoginModalOpen}>
             <RegisterModalContext.Provider value={setIsRegisterModalOpen}>
               <Spin spinning={spin}>
-                {
-                  isDesktop
-                    ?
-                    <DesktopView>
-                      <AppRoutes themeType={themeType} setThemeType={setThemeType} />
-                    </DesktopView>
-                    :
-                    <MobileView>
-                      <AppRoutes themeType={themeType} setThemeType={setThemeType} />
-                    </MobileView>
-                }
-                <Login isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
-                <Register isRegisterModalOpen={isRegisterModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
+                <GroceryUpdateTimeoutContext.Provider value={{
+                  groceryUpdateTimeoutId: groceryUpdateTimeoutId,
+                  setGroceryUpdateTimeoutId: setGroceryUpdateTimeoutId
+                }}>
+                  {
+                    isDesktop
+                      ?
+                      <DesktopView>
+                        <AppRoutes themeType={themeType} setThemeType={setThemeType} />
+                      </DesktopView>
+                      :
+                      <MobileView>
+                        <AppRoutes themeType={themeType} setThemeType={setThemeType} />
+                      </MobileView>
+                  }
+                  <Login isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
+                  <Register isRegisterModalOpen={isRegisterModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
+                </GroceryUpdateTimeoutContext.Provider>
               </Spin>
             </RegisterModalContext.Provider>
           </LoginModalContext.Provider>
