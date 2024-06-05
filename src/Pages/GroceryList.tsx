@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Checkbox, Col, Divider, Input, InputNumber, Row, Space, Typography, message } from "antd";
 import { CenteredFullDiv, NoBreak, useCSS } from "../Utils/Layout.tsx";
 import { CloseOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { GroceryUpdateTimeoutContext, SpinContext } from "../App.tsx";
+import { ApiCallsContext, SpinContext } from "../App.tsx";
+import { useAuth, userType } from "../Utils/Login.tsx";
+import { debounce, useDebounce } from "../Utils/Data.tsx";
 
 const { Title, Paragraph } = Typography;
 
@@ -14,7 +16,7 @@ type GroceryListItemType = {
   done: boolean;
 }
 
-type GroceryListItems = Record<number, GroceryListItemType>;
+export type GroceryListItems = Record<number, GroceryListItemType>;
 
 interface GroceryListItemComponentProps {
   id: number;
@@ -23,23 +25,6 @@ interface GroceryListItemComponentProps {
   done: boolean;
   items: GroceryListItems;
   setItems: React.Dispatch<React.SetStateAction<GroceryListItems>>;
-}
-
-const startSyncTimeout = (syncTimeoutId, setGroceryUpdateTimeoutId, items) => {
-  stopSyncTimeout(syncTimeoutId);
-  message.info('Sync will start in 10 seconds.');
-  var newSyncTimeoutId = setInterval(() => {
-    message.loading('Syncing with the server...');
-    setTimeout(() => {
-      message.info('Sync completed.');
-    }, 2000);
-    // sync modifications with the server
-  }, 10000);
-  setGroceryUpdateTimeoutId(newSyncTimeoutId);
-}
-
-const stopSyncTimeout = (syncTimeoutId) => {
-  if (syncTimeoutId) clearInterval(syncTimeoutId);
 }
 
 const GroceryListItem = ({ id, name, quantity, done, items, setItems }: GroceryListItemComponentProps) => {
@@ -69,11 +54,13 @@ const GroceryListItem = ({ id, name, quantity, done, items, setItems }: GroceryL
             <Input
               value={itemData.name}
               placeholder="Type something here..."
-              suffix={<CloseOutlined onClick={(e) => setItems((prevItems) => {
-                const newItems = { ...prevItems };
-                delete newItems[id];
-                return newItems;
-              })} />}
+              suffix={<CloseOutlined onClick={(e) => {
+                setItems((prevItems) => {
+                  const newItems = { ...prevItems };
+                  delete newItems[id];
+                  return newItems;
+                })
+              }} />}
               onChange={(e) => {
                 updateItemData('name', e.target.value);
               }}
@@ -91,15 +78,15 @@ const GroceryListNewItem = ({ id, name, quantity, done, items, setItems }: Groce
   const updateItemData = (field: string, value: any) => {
     setItemData({ ...itemData, [field]: value });
   }
-  
+
   useEffect(() => {
     const handleKeyPress = (e) => {
-      if (e.key === 'Enter') {
+      if (e.keyCode === 13) {
         if (!itemData.name) return;
 
         var newItemId = Object.keys(items).length + 1;
 
-        setItems({ ...items, [newItemId]: itemData });
+        setItems({ ...items, [newItemId]: { ...itemData, id: newItemId } });
         setItemData({ id: 0, name: '', quantity: 1, done: false });
       }
     }
@@ -114,12 +101,12 @@ const GroceryListNewItem = ({ id, name, quantity, done, items, setItems }: Groce
     <Col span={24}>
       <Row gutter={5} align={'middle'} style={{ width: '100%' }}>
         <Col span={2}>
-          <Checkbox 
-          checked={itemData.done} 
-          onChange={(e) => {
-            updateItemData('done', e.target.checked);
-          }}
-          disabled
+          <Checkbox
+            checked={itemData.done}
+            onChange={(e) => {
+              updateItemData('done', e.target.checked);
+            }}
+            disabled
           />
         </Col>
         <Col span={22}>
@@ -144,8 +131,10 @@ const GroceryListNewItem = ({ id, name, quantity, done, items, setItems }: Groce
 }
 
 export const GroceryList = () => {
+  const { user } = useAuth();
+
   const setSpin = useContext(SpinContext);
-  const { groceryUpdateTimeoutId, setGroceryUpdateTimeoutId } = useContext(GroceryUpdateTimeoutContext);
+  const { putUserItems } = useContext(ApiCallsContext)
 
   const background = useCSS('background');
   const color = useCSS('color');
@@ -154,7 +143,11 @@ export const GroceryList = () => {
 
   const getUserItems = () => {
     // fetch user items from the server
-    axios.get('https://mlmz8xrgxj.execute-api.eu-north-1.amazonaws.com/default/getUserGroceryList?user=cazzevongole').then((response) => {
+    axios.get('https://mlmz8xrgxj.execute-api.eu-north-1.amazonaws.com/default/getUserGroceryList',
+      {
+        params: { user: user?.username}
+      }
+    ).then((response) => {
       const newItems = response.data?.reduce((acc, item) => {
         acc[item.id] = item;
         return acc;
@@ -167,20 +160,16 @@ export const GroceryList = () => {
       setItems(newItems);
     });
   }
-
+  
   useEffect(() => {
     if (Object.keys(items).length > 0) { return }
 
     setSpin && setSpin(true);
     getUserItems();
   }, []);
-
+  
   useEffect(() => {
-    startSyncTimeout(groceryUpdateTimeoutId, setGroceryUpdateTimeoutId, items);
-
-    return () => {
-      stopSyncTimeout(groceryUpdateTimeoutId);
-    }
+    putUserItems(user, items);
   }, [items]);
 
   return (

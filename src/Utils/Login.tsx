@@ -4,10 +4,14 @@ import { useContext, createContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+export type userType = {
+  username: string;
+  email: string;
+}
 
 const AuthContext = createContext<{
   token: string;
-  user: null | Record<string, string>;
+  user: null | userType;
   loginAction: (data: any, setIsLoginButtonLoading: Dispatch<SetStateAction<boolean>>) => void;
   logOut: () => void;
 }>({
@@ -21,7 +25,7 @@ const AuthProvider = ({ children }) => {
   const username = localStorage.getItem("username");
   const email = localStorage.getItem("email");
 
-  const [user, setUser] = useState<null | Record<string, string>>(username && email ? { username, email } : null);
+  const [user, setUser] = useState<null | userType>(username && email ? { username, email } : null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
   const loginAction = async (data: any, setIsLoginButtonLoading: (arg0: boolean) => void) => {

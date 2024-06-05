@@ -1,21 +1,23 @@
 import React, { Dispatch, SetStateAction, createContext, useContext, useEffect } from "react";
 import { useState } from "react";
 import { Link, Routes, Route, useLocation } from 'react-router-dom';
-import { Col, Flex, Layout, Row, Popconfirm, Spin, Modal } from "antd";
+import { Col, Flex, Layout, Row, Popconfirm, Spin, Modal, message } from "antd";
 import { useMediaQuery } from "react-responsive";
 import { HorizontalMenu } from './Components/HorizontalMenu.tsx';
 import { Fridge } from "./Pages/Fridge.tsx";
-import { GroceryList } from "./Pages/GroceryList.tsx";
+import { GroceryList, GroceryListItems } from "./Pages/GroceryList.tsx";
 import { Home } from "./Pages/Home.tsx";
 import { Recipes } from "./Pages/Recipes.tsx";
 import { CenteredFullDiv, useCSS, useWindowDimensions } from "./Utils/Layout.tsx";
 
 import "./App.css";
-import AuthProvider, { useAuth } from "./Utils/Login.tsx";
+import AuthProvider, { useAuth, userType } from "./Utils/Login.tsx";
 import { Login, PrivateRoute } from "./Components/Login.tsx";
 import { NotLoggedIn } from "./Pages/NotLoggedIn.tsx";
 import { Profile } from "./Pages/Profile.tsx";
 import { Register } from "./Components/Register.tsx";
+import { useDebounce } from "./Utils/Data.tsx";
+import axios from "axios";
 
 const { Header, Content } = Layout;
 
@@ -25,7 +27,9 @@ export const ThemeContext = createContext(defaultThemeType);
 export const SpinContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
 export const LoginModalContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
 export const RegisterModalContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
-export const GroceryUpdateTimeoutContext = createContext<Record<string, NodeJS.Timeout | null | Dispatch<SetStateAction<NodeJS.Timeout | null>>>>({});
+export const ApiCallsContext = createContext<Record<string, any>>({
+  putUserItems: () => { },
+});
 
 interface AppRoutesProps {
   themeType: string;
@@ -202,7 +206,20 @@ export const App = () => {
   const [spin, setSpin] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [groceryUpdateTimeoutId, setGroceryUpdateTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+  const putUserItems = useDebounce((user: null | userType, items: GroceryListItems) => {
+    var newItems = Object.keys(items).map((itemId) => {
+      return items[itemId];
+    });
+  
+    axios.put('https://mlmz8xrgxj.execute-api.eu-north-1.amazonaws.com/default/putGroceryList', {
+      user: user?.username,
+      items: newItems
+    }).catch((error) => {
+      console.error('Error while saving user items', error);
+      message.error('Error while saving user items');
+    });
+  }, 3000);
 
   return (
     <ThemeContext.Provider value={themeType}>
@@ -210,11 +227,8 @@ export const App = () => {
         <AuthProvider>
           <LoginModalContext.Provider value={setIsLoginModalOpen}>
             <RegisterModalContext.Provider value={setIsRegisterModalOpen}>
-              <Spin spinning={spin}>
-                <GroceryUpdateTimeoutContext.Provider value={{
-                  groceryUpdateTimeoutId: groceryUpdateTimeoutId,
-                  setGroceryUpdateTimeoutId: setGroceryUpdateTimeoutId
-                }}>
+              <ApiCallsContext.Provider value={{ putUserItems }}>
+                <Spin spinning={spin}>
                   {
                     isDesktop
                       ?
@@ -228,8 +242,8 @@ export const App = () => {
                   }
                   <Login isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
                   <Register isRegisterModalOpen={isRegisterModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
-                </GroceryUpdateTimeoutContext.Provider>
-              </Spin>
+                </Spin>
+              </ApiCallsContext.Provider>
             </RegisterModalContext.Provider>
           </LoginModalContext.Provider>
         </AuthProvider>
