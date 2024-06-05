@@ -1,7 +1,7 @@
 export const register = () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
-      .register(`/firebase-messaging-sw.js`, { scope: `${process.env.PUBLIC_URL}/` })
+      .register(`${process.env.PUBLIC_URL}/firebase-messaging-sw.js`)
       .then((registration) => {
       })
       .catch((error) => {
