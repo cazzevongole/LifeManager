@@ -142,6 +142,9 @@ export const GroceryList = () => {
   const [items, setItems] = useState({} as GroceryListItems);
 
   const getUserItems = () => {
+    var spinTimeout = setTimeout(() => {
+      setSpin && setSpin(true);
+    }, 300);
     // fetch user items from the server
     axios.get('https://mlmz8xrgxj.execute-api.eu-north-1.amazonaws.com/default/getUserGroceryList',
       {
@@ -152,6 +155,8 @@ export const GroceryList = () => {
         acc[item.id] = item;
         return acc;
       }, {});
+
+      clearTimeout(spinTimeout);
       setSpin && setSpin(false);
 
       // compare newItems with items and update only if there are changes
@@ -164,7 +169,6 @@ export const GroceryList = () => {
   useEffect(() => {
     if (Object.keys(items).length > 0) { return }
 
-    setSpin && setSpin(true);
     getUserItems();
   }, []);
   
