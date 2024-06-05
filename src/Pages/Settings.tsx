@@ -21,6 +21,10 @@ export const Settings = ({ themeType, setThemeType }: SettingsProps) => {
           <Paragraph style={{ backgroundColor: background, color: color }}>Enable dark theme:</Paragraph>
           <Switch checkedChildren="Dark" unCheckedChildren="Light" onClick={() => setThemeType(themeType === 'dark' ? 'light' : 'dark')} checked={themeType === 'dark'} />
         </Flex>
+        <Flex justify="space-between">
+          <Paragraph style={{ backgroundColor: background, color: color }}>App version:</Paragraph>
+          <Paragraph style={{ backgroundColor: background, color: color }}>2024-06-05 20:40</Paragraph>
+        </Flex>
       </Col>
     </Row>
   )
