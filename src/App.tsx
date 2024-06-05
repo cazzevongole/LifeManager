@@ -219,7 +219,7 @@ export const App = () => {
       console.error('Error while saving user items', error);
       message.error('Error while saving user items');
     });
-  }, 3000);
+  }, 500);
 
   return (
     <ThemeContext.Provider value={themeType}>
