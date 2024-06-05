@@ -58,7 +58,7 @@ const DesktopView = ({ children }) => {
 
   const { height } = useWindowDimensions();
 
-  const [selectedSection, setSelectedSection] = useState("home");
+  const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   const pathname = useLocation().pathname;
   useEffect(() => {
@@ -69,7 +69,7 @@ const DesktopView = ({ children }) => {
     }
   }, [pathname]);
 
-  const { user, token, logOut } = useAuth();
+  const { user, logOut } = useAuth();
 
   var appSections = [
     {
