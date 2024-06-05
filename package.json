@@ -1,6 +1,6 @@
 {
   "name": "life-manager",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "homepage": "https://cazzevongole.github.io/LifeManager",
   "dependencies": {
@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.17.3",
     "axios": "^1.7.2",
+    "env-cmd": "^10.1.0",
     "firebase": "^10.12.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -22,7 +23,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build:staging": "env-cmd -f .env.staging npm run build",
+    "build:production": "env-cmd -f .env.production npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
