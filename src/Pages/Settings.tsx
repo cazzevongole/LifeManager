@@ -1,5 +1,5 @@
 import { Col, Flex, Row, Switch, Typography } from "antd";
-import React from "react"
+import React from "react";
 import { Center, useCSS } from "../Utils/Layout.tsx";
 
 const { Title, Paragraph } = Typography;

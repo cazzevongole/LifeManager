@@ -1,7 +1,6 @@
-import React, { CSSProperties, useContext } from 'react';
-import { useState, useEffect } from 'react';
-import { ThemeContext } from '../App.tsx';
 import { Col, Flex, Row } from 'antd';
+import React, { CSSProperties, useContext, useEffect, useState } from 'react';
+import { ThemeContext } from '../App.tsx';
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;

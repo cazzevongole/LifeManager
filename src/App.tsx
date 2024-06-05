@@ -1,8 +1,7 @@
-import React, { Dispatch, SetStateAction, createContext, useContext, useEffect } from "react";
-import { useState } from "react";
-import { Link, Routes, Route, useLocation } from 'react-router-dom';
-import { Col, Flex, Layout, Row, Popconfirm, Spin, Modal, message } from "antd";
+import { Col, Flex, Layout, Popconfirm, Row, Spin, message } from "antd";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { HorizontalMenu } from './Components/HorizontalMenu.tsx';
 import { Fridge } from "./Pages/Fridge.tsx";
 import { GroceryList, GroceryListItems } from "./Pages/GroceryList.tsx";
@@ -10,14 +9,14 @@ import { Home } from "./Pages/Home.tsx";
 import { Recipes } from "./Pages/Recipes.tsx";
 import { CenteredFullDiv, useCSS, useWindowDimensions } from "./Utils/Layout.tsx";
 
+import axios from "axios";
 import "./App.css";
-import AuthProvider, { useAuth, userType } from "./Utils/Login.tsx";
 import { Login, PrivateRoute } from "./Components/Login.tsx";
+import { Register } from "./Components/Register.tsx";
 import { NotLoggedIn } from "./Pages/NotLoggedIn.tsx";
 import { Profile } from "./Pages/Profile.tsx";
-import { Register } from "./Components/Register.tsx";
 import { useDebounce } from "./Utils/Data.tsx";
-import axios from "axios";
+import AuthProvider, { useAuth, userType } from "./Utils/Login.tsx";
 
 const { Header, Content } = Layout;
 

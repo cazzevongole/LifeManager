@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export const trueFirstSorting = (a: boolean, b: boolean) => a === b ? 0 : a ? -1 : 1;
 

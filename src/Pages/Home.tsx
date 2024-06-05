@@ -1,9 +1,9 @@
-import { Col, Flex, Row, Space, Typography } from "antd"
+import { Typography } from "antd";
 import React, { useContext } from "react";
-import { CenteredFullDiv, NoBreak, useCSS } from "../Utils/Layout.tsx";
-import { useAuth } from "../Utils/Login.tsx";
 import { Link } from "react-router-dom";
 import { LoginModalContext } from "../App.tsx";
+import { CenteredFullDiv, NoBreak, useCSS } from "../Utils/Layout.tsx";
+import { useAuth } from "../Utils/Login.tsx";
 
 const { Title, Paragraph } = Typography;
 
