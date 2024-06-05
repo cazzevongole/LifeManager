@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "https://cazzevongole.github.io/LifeManager/static/css/main.574c23dd.css",
-    "main.js": "https://cazzevongole.github.io/LifeManager/static/js/main.356a800e.js",
+    "main.js": "https://cazzevongole.github.io/LifeManager/static/js/main.e68b573f.js",
     "index.html": "https://cazzevongole.github.io/LifeManager/index.html",
     "main.574c23dd.css.map": "https://cazzevongole.github.io/LifeManager/static/css/main.574c23dd.css.map",
-    "main.356a800e.js.map": "https://cazzevongole.github.io/LifeManager/static/js/main.356a800e.js.map"
+    "main.e68b573f.js.map": "https://cazzevongole.github.io/LifeManager/static/js/main.e68b573f.js.map"
   },
   "entrypoints": [
     "static/css/main.574c23dd.css",
-    "static/js/main.356a800e.js"
+    "static/js/main.e68b573f.js"
   ]
 }
