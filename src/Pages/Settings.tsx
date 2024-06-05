@@ -1,6 +1,8 @@
 import { Col, Flex, Row, Switch, Typography } from "antd";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Center, useCSS } from "../Utils/Layout.tsx";
+import { messaging, setupNotifications } from "../firebase.js";
+import { NotificationTokenContext } from "../App.tsx";
 
 const { Title, Paragraph } = Typography;
 
@@ -12,6 +14,13 @@ interface SettingsProps {
 export const Settings = ({ themeType, setThemeType }: SettingsProps) => {
   const background = useCSS('background');
   const color = useCSS('color');
+  const { notificationToken, setNotificationToken } = useContext(NotificationTokenContext);
+
+  const activateNotifications = () => {
+    setupNotifications().then((response) => {
+      setNotificationToken(response.token);
+    });
+  }
 
   return (
     <Row justify={'center'} align={'middle'}>
@@ -22,8 +31,12 @@ export const Settings = ({ themeType, setThemeType }: SettingsProps) => {
           <Switch checkedChildren="Dark" unCheckedChildren="Light" onClick={() => setThemeType(themeType === 'dark' ? 'light' : 'dark')} checked={themeType === 'dark'} />
         </Flex>
         <Flex justify="space-between">
+          <Paragraph style={{ backgroundColor: background, color: color }}>Push Notifications:</Paragraph>
+          <Switch checkedChildren="On" unCheckedChildren="Off" onClick={activateNotifications} checked={!!notificationToken} />
+        </Flex>
+        <Flex justify="space-between">
           <Paragraph style={{ backgroundColor: background, color: color }}>App version:</Paragraph>
-          <Paragraph style={{ backgroundColor: background, color: color }}>2024-06-05 20:55</Paragraph>
+          <Paragraph style={{ backgroundColor: background, color: color }}>2024-06-05 23:45</Paragraph>
         </Flex>
       </Col>
     </Row>

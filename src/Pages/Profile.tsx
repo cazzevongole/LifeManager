@@ -1,4 +1,4 @@
-import { Divider, Space, Typography } from "antd";
+import { Divider, Space, Typography, message } from "antd";
 import React from "react";
 import { CenteredFullDiv, useCSS } from "../Utils/Layout.tsx";
 import { Settings } from "./Settings.tsx";
@@ -16,7 +16,7 @@ export const Profile = ({ themeType, setThemeType }: ProfileProps) => {
   const color = useCSS('color');
   const { user } = useAuth();
 
-  const logName = useDebounce(() => console.log('Clicked on username', user?.username), 1000);
+  const logName = useDebounce(() => message.info(`It's you, ${user?.username}. You look awesome!`), 1000);
 
   return (
     <CenteredFullDiv style={{paddingTop: '20px'}}>
@@ -25,7 +25,7 @@ export const Profile = ({ themeType, setThemeType }: ProfileProps) => {
           <Title style={{ backgroundColor: background, color: color, textAlign: 'center' }}>Your Profile</Title>
           <Paragraph style={{ backgroundColor: background, color: color, textAlign: 'center' }}>
             {
-              user && <>Hey <span style={{ color: "yellow" }} onClick={logName}>{user.username}</span>!<br /></>
+              user && <>Hey <span style={{ color: "yellow", cursor: "pointer" }} onClick={logName}>{user.username}</span>!<br /></>
             }
             In this page you will find your user informations and settings.
           </Paragraph>

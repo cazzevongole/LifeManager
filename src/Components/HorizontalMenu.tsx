@@ -4,8 +4,8 @@ import { ItemType, MenuItemType } from 'antd/es/menu/interface';
 import { ThemeContext } from "../App.tsx";
 
 interface HorizontalMenuProps {
-  selectedSection: string | undefined;
-  setSelectedSection: React.Dispatch<React.SetStateAction<string>>;
+  selectedSection: string | null;
+  setSelectedSection: React.Dispatch<React.SetStateAction<string | null>>;
   items: ItemType<MenuItemType>[];
 }
 

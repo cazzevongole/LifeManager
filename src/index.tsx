@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router-dom';
 import 'antd/dist/reset.css';
 import { App } from './App.tsx';
 import './index.css';
+import { register } from './serviceWorker.js';
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 
@@ -14,3 +15,5 @@ root.render(
     </HashRouter>
   </React.StrictMode>
 );
+
+register();

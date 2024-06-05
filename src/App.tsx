@@ -17,14 +17,25 @@ import { NotLoggedIn } from "./Pages/NotLoggedIn.tsx";
 import { Profile } from "./Pages/Profile.tsx";
 import { useDebounce } from "./Utils/Data.tsx";
 import AuthProvider, { useAuth, userType } from "./Utils/Login.tsx";
+import useVisibilityChange from "./useVisibilityChange.js";
+import { getToken } from "@firebase/messaging";
+import { messaging } from "./firebase.js";
 
 const { Header, Content } = Layout;
 
+export const IsForegroundContext = createContext<boolean>(true);
 const defaultThemeType = 'dark';
 export const ThemeContext = createContext(defaultThemeType);
 
 export const SpinContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
 export const LoginModalContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
+export const NotificationTokenContext = createContext<{
+  notificationToken: string | null;
+  setNotificationToken: React.Dispatch<React.SetStateAction<string | null>>;
+}>({
+  notificationToken: null,
+  setNotificationToken: () => { },
+});
 export const RegisterModalContext = createContext<React.Dispatch<React.SetStateAction<boolean>> | null>(null);
 export const ApiCallsContext = createContext<Record<string, any>>({
   putUserItems: () => { },
@@ -132,7 +143,7 @@ const MobileView = ({ children }) => {
 
   const { height } = useWindowDimensions();
 
-  const [selectedSection, setSelectedSection] = useState("home");
+  const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   const { user, logOut } = useAuth();
 
@@ -199,18 +210,28 @@ const MobileView = ({ children }) => {
 };
 
 export const App = () => {
+  const notificationPermission = Notification.permission;
+
   const isDesktop = useMediaQuery({ minWidth: 768 });
+  const isForeground = useVisibilityChange();
 
   const [themeType, setThemeType] = useState(defaultThemeType);
   const [spin, setSpin] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
+  const [notificationToken, setNotificationToken] = useState<string | null>(null);
+  if (notificationPermission === 'granted') {
+    getToken(messaging).then((token) => {
+      setNotificationToken(token);
+    });
+  }
+
   const putUserItems = useDebounce((user: null | userType, items: GroceryListItems) => {
     var newItems = Object.keys(items).map((itemId) => {
       return items[itemId];
     });
-  
+
     axios.put('https://mlmz8xrgxj.execute-api.eu-north-1.amazonaws.com/default/putGroceryList', {
       user: user?.username,
       items: newItems
@@ -221,33 +242,40 @@ export const App = () => {
   }, 500);
 
   return (
-    <ThemeContext.Provider value={themeType}>
-      <SpinContext.Provider value={setSpin}>
-        <AuthProvider>
-          <LoginModalContext.Provider value={setIsLoginModalOpen}>
-            <RegisterModalContext.Provider value={setIsRegisterModalOpen}>
-              <ApiCallsContext.Provider value={{ putUserItems }}>
-                <Spin spinning={spin}>
-                  {
-                    isDesktop
-                      ?
-                      <DesktopView>
-                        <AppRoutes themeType={themeType} setThemeType={setThemeType} />
-                      </DesktopView>
-                      :
-                      <MobileView>
-                        <AppRoutes themeType={themeType} setThemeType={setThemeType} />
-                      </MobileView>
-                  }
-                  <Login isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
-                  <Register isRegisterModalOpen={isRegisterModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
-                </Spin>
-              </ApiCallsContext.Provider>
-            </RegisterModalContext.Provider>
-          </LoginModalContext.Provider>
-        </AuthProvider>
-      </SpinContext.Provider>
-    </ThemeContext.Provider>
+    <IsForegroundContext.Provider value={isForeground}>
+      <ThemeContext.Provider value={themeType}>
+        <SpinContext.Provider value={setSpin}>
+          <AuthProvider>
+            <LoginModalContext.Provider value={setIsLoginModalOpen}>
+              <RegisterModalContext.Provider value={setIsRegisterModalOpen}>
+                <NotificationTokenContext.Provider value={{
+                  notificationToken,
+                  setNotificationToken
+                }}>
+                  <ApiCallsContext.Provider value={{ putUserItems }}>
+                    <Spin spinning={spin}>
+                      {
+                        isDesktop
+                          ?
+                          <DesktopView>
+                            <AppRoutes themeType={themeType} setThemeType={setThemeType} />
+                          </DesktopView>
+                          :
+                          <MobileView>
+                            <AppRoutes themeType={themeType} setThemeType={setThemeType} />
+                          </MobileView>
+                      }
+                      <Login isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
+                      <Register isRegisterModalOpen={isRegisterModalOpen} setIsRegisterModalOpen={setIsRegisterModalOpen} />
+                    </Spin>
+                  </ApiCallsContext.Provider>
+                </NotificationTokenContext.Provider>
+              </RegisterModalContext.Provider>
+            </LoginModalContext.Provider>
+          </AuthProvider>
+        </SpinContext.Provider>
+      </ThemeContext.Provider>
+    </IsForegroundContext.Provider>
   )
 }
 
