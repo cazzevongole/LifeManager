@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "http://localhost:3000/static/css/main.574c23dd.css",
-    "main.js": "http://localhost:3000/static/js/main.078399b4.js",
-    "index.html": "http://localhost:3000/index.html",
-    "main.574c23dd.css.map": "http://localhost:3000/static/css/main.574c23dd.css.map",
-    "main.078399b4.js.map": "http://localhost:3000/static/js/main.078399b4.js.map"
+    "main.css": "https://cazzevongole.github.io/static/css/main.574c23dd.css",
+    "main.js": "https://cazzevongole.github.io/static/js/main.9967220d.js",
+    "index.html": "https://cazzevongole.github.io/index.html",
+    "main.574c23dd.css.map": "https://cazzevongole.github.io/static/css/main.574c23dd.css.map",
+    "main.9967220d.js.map": "https://cazzevongole.github.io/static/js/main.9967220d.js.map"
   },
   "entrypoints": [
     "static/css/main.574c23dd.css",
-    "static/js/main.078399b4.js"
+    "static/js/main.9967220d.js"
   ]
 }
