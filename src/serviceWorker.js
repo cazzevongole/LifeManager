@@ -1,12 +1,36 @@
 export const register = () => {
   if ('serviceWorker' in navigator) {
-    console.log('Registering service worker with scope: ', '/LifeManager/');
-    navigator.serviceWorker
-      .register('/LifeManager/firebase-messaging-sw.js', { scope: '/LifeManager/' })
-      .then((registration) => {
-      })
-      .catch((error) => {
-        console.error('Error registering service worker:', error);
+    const files = [
+      'firebase-messaging-sw.js',
+      '/firebase-messaging-sw.js',
+      'LifeManager/firebase-messaging-sw.js',
+      '/LifeManager/firebase-messaging-sw.js',
+      `${process.env.PUBLIC_URL}/firebase-messaging-sw.js`,
+      `${process.env.PUBLIC_URL}/LifeManager/firebase-messaging-sw.js`,
+    ]
+    const scopes = [
+      '',
+      '/',
+      'LifeManager/',
+      '/LifeManager/'
+      `${process.env.PUBLIC_URL}/`,
+      `${process.env.PUBLIC_URL}/LifeManager/`,
+    ]
+
+    files.forEach(file => {
+      scopes.forEach(scope => {
+        console.log('file:', file)
+        console.log('scope:', scope)
+
+        navigator.serviceWorker
+          .register(file, { scope: scope })
+          .then((registration) => {
+            console.log('Service worker registration successful:', registration);
+          })
+          .catch((error) => {
+            console.error('Error registering service worker:', error);
+          });
       });
+    });
   }
 };
