@@ -19,12 +19,12 @@ export const register = () => {
 
     files.forEach(file => {
       scopes.forEach(scope => {
-        console.log('file:', file)
-        console.log('scope:', scope)
 
         navigator.serviceWorker
           .register(file, { scope: scope })
           .then((registration) => {
+            console.log('file:', file)
+            console.log('scope:', scope)
             console.log('Service worker registration successful:', registration);
           })
           .catch((error) => {
