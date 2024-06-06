@@ -12,7 +12,7 @@ export const register = () => {
       '',
       '/',
       'LifeManager/',
-      '/LifeManager/'
+      '/LifeManager/',
       `${process.env.PUBLIC_URL}/`,
       `${process.env.PUBLIC_URL}/LifeManager/`,
     ]
