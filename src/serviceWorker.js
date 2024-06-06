@@ -1,8 +1,8 @@
 export const register = () => {
   if ('serviceWorker' in navigator) {
-    console.log('Registering service worker with scope: ', '/');
+    console.log('Registering service worker with scope: ', '/LifeManager/');
     navigator.serviceWorker
-      .register('/LifeManager/firebase-messaging-sw.js', { scope: '/' })
+      .register('/LifeManager/firebase-messaging-sw.js', { scope: '/LifeManager/' })
       .then((registration) => {
       })
       .catch((error) => {
