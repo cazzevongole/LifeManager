@@ -36,7 +36,7 @@ export const Settings = ({ themeType, setThemeType }: SettingsProps) => {
         </Flex>
         <Flex justify="space-between">
           <Paragraph style={{ backgroundColor: background, color: color }}>App version:</Paragraph>
-          <Paragraph style={{ backgroundColor: background, color: color }}>2024-06-07 00:15</Paragraph>
+          <Paragraph style={{ backgroundColor: background, color: color }}>2024-06-07 00:20</Paragraph>
         </Flex>
       </Col>
     </Row>
