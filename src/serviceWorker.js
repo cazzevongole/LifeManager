@@ -1,15 +1,10 @@
 const files = [
-  'firebase-messaging-sw.js',
-  '/firebase-messaging-sw.js',
-  'LifeManager/firebase-messaging-sw.js', // this is the one
-  '/LifeManager/firebase-messaging-sw.js',
+  'LifeManager/firebase-messaging-sw.js',
   `${process.env.PUBLIC_URL}/firebase-messaging-sw.js`,
   `${process.env.PUBLIC_URL}/LifeManager/firebase-messaging-sw.js`,
 ]
 const scopes = [
-  '',
-  'LifeManager/',
-  '/LifeManager/', // this is the one
+  '/LifeManager/',
 ]
 
 // try to register the service worker with different files and scopes until it works.
