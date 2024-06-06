@@ -1,5 +1,5 @@
 const files = [
-  'LifeManager/firebase-messaging-sw.js', // this is the one
+  `${process.env.PUBLIC_URL}/firebase-messaging-sw.js`,
 ]
 const scopes = [
   '/LifeManager/', // this is the one
