@@ -2,13 +2,13 @@ import { initializeApp } from '@firebase/app';
 import { getMessaging, getToken, onMessage } from '@firebase/messaging';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBamF1ioX5wFg75hjNd3SVGW1X0aDoBsB0",
-  authDomain: "lifemanager-7bc94.firebaseapp.com",
-  projectId: "lifemanager-7bc94",
-  storageBucket: "lifemanager-7bc94.appspot.com",
-  messagingSenderId: "225455895010",
-  appId: "1:225455895010:web:2dbd4a9b3ab77df08c49bb",
-  measurementId: "G-3JSTW57W9F"
+  apiKey: "AIzaSyAUO2lLzHHtYJ_IEkuLerKjb8HinI16RyU",
+  authDomain: "life-manager-68747.firebaseapp.com",
+  projectId: "life-manager-68747",
+  storageBucket: "life-manager-68747.appspot.com",
+  messagingSenderId: "267625436469",
+  appId: "1:267625436469:web:c99dabcc101e0bef6f287c",
+  measurementId: "G-C3XNM4GSMV"
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
