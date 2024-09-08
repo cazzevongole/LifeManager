@@ -2,7 +2,7 @@
   "name": "life-manager",
   "version": "0.2.0",
   "private": true,
-  "homepage": "https://cazzevongole.github.io/",
+  "homepage": "https://cazzevongole.github.io/LifeManager/",
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
     "@testing-library/jest-dom": "^5.17.0",
