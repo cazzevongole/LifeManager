@@ -10,7 +10,7 @@ const root = createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <React.StrictMode>
-    <Router>
+    <Router basename='/LifeManager'>
       <App />
     </Router>
   </React.StrictMode>
