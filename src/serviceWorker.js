@@ -2,7 +2,7 @@ const files = [
   `${process.env.PUBLIC_URL}/firebase-messaging-sw.js`,
 ]
 const scopes = [
-  '/LifeManager/', // this is the one
+  '/', // this is the one
 ]
 
 // try to register the service worker with different files and scopes until it works.

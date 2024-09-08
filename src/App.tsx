@@ -51,7 +51,6 @@ const AppRoutes = ({ themeType, setThemeType }: AppRoutesProps) => (
     <Route path="/profile" element={<Profile themeType={themeType} setThemeType={setThemeType} />} />
     <Route path="/not-logged-in" element={<NotLoggedIn />} />
     <Route element={<PrivateRoute />}>
-      <Route path="/LifeManager" element={<Home />} />
       <Route path="/fridge" element={<Fridge />} />
       <Route path="/recipes" element={<Recipes />} />
       <Route path="/grocery-list" element={<GroceryList />} />
