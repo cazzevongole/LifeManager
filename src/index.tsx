@@ -6,6 +6,8 @@ import { App } from './App.tsx';
 import './index.css';
 import { register } from './serviceWorker.js';
 
+register();
+
 const root = createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
@@ -15,5 +17,3 @@ root.render(
     </Router>
   </React.StrictMode>
 );
-
-register();
